@@ -9,9 +9,12 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "turbo": "latest"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "turbo": "1.12.3"
   }
 }
