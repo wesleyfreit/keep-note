@@ -10,11 +10,15 @@
   },
   "scripts": {
     "dev": "turbo dev",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "husky": "9.0.10",
+    "lint-staged": "15.2.2",
     "turbo": "1.12.3"
   }
 }
