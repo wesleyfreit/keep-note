@@ -1,0 +1,17 @@
+{
+  "name": "keep-note",
+  "version": "1.0.0",
+  "private": true,
+  "author": "wesley_freit",
+  "license": "MIT",
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
