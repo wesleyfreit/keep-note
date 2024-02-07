@@ -19,6 +19,7 @@
     "@repo/typescript-config": "workspace:*",
     "husky": "9.0.10",
     "lint-staged": "15.2.2",
+    "prettier": "3.2.5",
     "turbo": "1.12.3"
   }
 }
