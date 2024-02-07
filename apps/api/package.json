@@ -1,0 +1,29 @@
+{
+  "name": "@keep-note/api",
+  "version": "1.0.0",
+  "private": true,
+  "author": "wesley_freit",
+  "license": "MIT",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/server.ts",
+    "build": "tsup src --out-dir build",
+    "start": "node build/server.js",
+    "lint": "eslint src --fix"
+  },
+  "dependencies": {
+    "fastify": "4.26.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "20.11.16",
+    "eslint": "8.56.0",
+    "tsup": "8.0.1",
+    "tsx": "4.7.0",
+    "typescript": "5.3.3"
+  }
+}
