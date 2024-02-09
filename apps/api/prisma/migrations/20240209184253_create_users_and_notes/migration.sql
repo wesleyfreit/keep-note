@@ -12,8 +12,7 @@ CREATE TABLE "users" (
 CREATE TABLE "notes" (
     "id" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "notes_pkey" PRIMARY KEY ("id")
 );
