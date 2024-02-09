@@ -15,6 +15,7 @@
     "lint": "eslint src --fix"
   },
   "dependencies": {
+    "@prisma/client": "5.9.1",
     "fastify": "4.26.0"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "20.11.16",
     "eslint": "8.56.0",
+    "prisma": "5.9.1",
     "tsup": "8.0.1",
     "tsx": "4.7.0",
     "typescript": "5.3.3"
