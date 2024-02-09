@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "@prisma/client": "5.9.1",
-    "fastify": "4.26.0"
+    "dotenv": "16.4.1",
+    "fastify": "4.26.0",
+    "zod": "3.22.4"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
