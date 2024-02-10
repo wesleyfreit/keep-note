@@ -1,15 +1,13 @@
 'use client';
-import { appApi } from '@/services/axios';
+import { saveNote } from '@/actions/notes';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { toast } from 'sonner';
 
 export const NewNoteCard = () => {
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
   const handleStartEditor = () => {
     setShouldShowOnboarding(false);
@@ -23,16 +21,9 @@ export const NewNoteCard = () => {
     if (event.target.value === '') setShouldShowOnboarding(true);
   };
 
-  const handleSaveNote = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    const content = formData.get('content') as string;
-
+  const handleSaveNote = async (formData: FormData) => {
     try {
-      await appApi.post('/api/notes', { content });
-
-      router.refresh();
+      await saveNote(formData);
       setOpen(false);
 
       toast.success('Nota criada com sucesso!');
@@ -61,7 +52,7 @@ export const NewNoteCard = () => {
               <X className="size-5" />
             </Dialog.Close>
 
-            <form onSubmit={handleSaveNote} className="flex flex-1 flex-col">
+            <form action={handleSaveNote} className="flex flex-1 flex-col">
               <div className="flex flex-1 flex-col gap-5 p-5">
                 <span className="text-sm font-medium text-slate-300">Adicionar nota</span>
 

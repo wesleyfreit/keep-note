@@ -3,10 +3,10 @@ import { NewNoteCard } from '@/components/new-note-card';
 import { NoteCard } from '@/components/note-card';
 import { Separator } from '@/components/separator';
 import { NoteDTO } from '@/dtos/NoteDTO';
-import { appApi } from '@/services/axios';
+import { api } from '@/services/api';
 
 export default async function Home() {
-  const response = await appApi.get<{ notes: NoteDTO[] }>('/api/notes');
+  const response = await api.get<{ notes: NoteDTO[] }>('/notes');
 
   const { notes } = response.data;
 
