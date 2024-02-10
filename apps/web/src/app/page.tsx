@@ -2,8 +2,14 @@ import { Header } from '@/components/header';
 import { NewNoteCard } from '@/components/new-note-card';
 import { NoteCard } from '@/components/note-card';
 import { Separator } from '@/components/separator';
+import { NoteDTO } from '@/dtos/NoteDTO';
+import { appApi } from '@/services/axios';
 
-export default function Home() {
+export default async function Home() {
+  const response = await appApi.get<{ notes: NoteDTO[] }>('/api/notes');
+
+  const { notes } = response.data;
+
   return (
     <>
       <Header />
@@ -22,56 +28,9 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-6 auto-rows-[258px]">
           <NewNoteCard />
 
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
-
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
-          <NoteCard
-            note={{
-              date: new Date(),
-              content:
-                'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor facilis dicta vitae natus. Quibusdam aspernatur at porro, hic ullam cumque quidem blanditiis omnis quo et obcaecati aliquid temporibus sequi nemo?',
-            }}
-          />
+          {notes.map((note) => (
+            <NoteCard key={note.id} note={note} />
+          ))}
         </div>
       </main>
     </>

@@ -5,13 +5,13 @@ import { ptBR } from 'date-fns/locale';
 import { X } from 'lucide-react';
 
 interface NoteCardProps {
-  note: { date: Date; content: string };
+  note: { id: string; content: string; date: Date };
 }
 
 export const NoteCard = ({ note }: NoteCardProps) => {
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="rounded-md bg-slate-800 text-left p-5 space-y-4 overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
+      <Dialog.Trigger className="rounded-md bg-slate-800 text-left flex flex-col items-start p-5 space-y-4 overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
         <span className="text-sm font-medium text-slate-300">
           {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
         </span>
@@ -33,7 +33,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
                 {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
               </span>
 
-              <div className="overflow-y-auto max-h-[45vh]">
+              <div className="overflow-y-auto flex-grow h-20">
                 <p className="text-sm leading-6 text-slate-400">{note.content}</p>
               </div>
             </div>
