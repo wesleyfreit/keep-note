@@ -1,12 +1,10 @@
+import { env } from '@/env';
 import axios from 'axios';
 
-const privateApiUrl = process.env.NEXT_PRIVATE_API_URL;
-const publicApiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 export const serverApi = axios.create({
-  baseURL: privateApiUrl,
+  baseURL: env.NEXT_PRIVATE_API_URL,
 });
 
 export const appApi = axios.create({
-  baseURL: publicApiUrl,
+  baseURL: env.NEXT_PUBLIC_API_URL,
 });
