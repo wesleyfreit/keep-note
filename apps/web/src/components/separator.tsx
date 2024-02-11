@@ -1,1 +1,1 @@
-export const Separator = () => <div className="h-px bg-slate-700" />;
+export const Separator = () => <div className="h-px bg-slate-600" />;

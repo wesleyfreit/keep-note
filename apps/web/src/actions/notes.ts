@@ -13,10 +13,9 @@ export const getAllNotes = async () => {
   }
 };
 
-export const saveNote = async (formData: FormData) => {
-  const content = formData.get('content') as string;
+export const saveNote = async (title: string, content: string) => {
   try {
-    await api.post('/notes', { content });
+    await api.post('/notes', { title, content });
     revalidatePath('/');
   } catch (error) {
     if (error instanceof AxiosError) {
