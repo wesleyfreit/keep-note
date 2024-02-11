@@ -17,8 +17,11 @@ export const Header = ({ setSearch }: HeaderProps) => {
   };
 
   return (
-    <header className="px-6 py-3 flex items-center justify-between border-b border-b-slate-700">
-      <a href="/" className="text-xl font-bold hover:underline">
+    <header className="px-6 py-3 flex items-center justify-between border-b border-b-slate-700 gap-5">
+      <a
+        href="/"
+        className="text-xl font-bold hover:underline outline-none focus-visible:underline"
+      >
         KeepNote
       </a>
 
@@ -32,14 +35,14 @@ export const Header = ({ setSearch }: HeaderProps) => {
 
         <button
           type="submit"
-          className="absolute right-0 translate-y-1 -translate-x-1 p-2 rounded-full hover:bg-slate-700"
+          className="absolute right-0 translate-y-1 -translate-x-1 p-2 rounded-full hover:bg-slate-700 group outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
         >
-          <SearchIcon className="w-5 h-5 text-slate-300" />
+          <SearchIcon className="w-5 h-5 text-slate-500 group-hover:text-slate-300" />
         </button>
       </form>
 
       <div className="flex items-center gap-3">
-        <button className="border-slate-700 text-slate-300 hover:bg-slate-700 border-2 p-2 rounded-full">
+        <button className="border-slate-700 text-slate-300 hover:bg-slate-700 border-2 p-2 rounded-full outline-none focus-visible:border-slate-500">
           <User className="text-slate-300" />
         </button>
       </div>

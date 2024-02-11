@@ -36,12 +36,14 @@ export default function Home() {
     <>
       <Header setSearch={setSearch} />
 
-      <main className="mx-auto max-w-6xl my-12 space-y-6">
+      <main className="mx-auto max-w-6xl my-12 space-y-6 p-5">
+        <div className="flex justify-center">
+          <NewNoteCard />
+        </div>
+
         <Separator />
 
         <div className="grid grid-cols-3 gap-6 auto-rows-[258px]">
-          <NewNoteCard />
-
           {filteredNotes.map((note) => (
             <NoteCard key={note.id} note={note} />
           ))}
