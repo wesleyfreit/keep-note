@@ -1,14 +1,27 @@
+'use client';
 import { SearchIcon, User } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent } from 'react';
 
-interface HeaderProps {
-  setSearch: (query: string) => void;
-}
+// interface HeaderProps {
+//   setSearch: (query: string) => void;
+// }
 
-export const Header = ({ setSearch }: HeaderProps) => {
+export const Header = () => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
-    setSearch(query);
+    // setSearch(query);
+    const params = new URLSearchParams(searchParams);
+
+    if (query) {
+      params.set('search', query);
+    } else params.delete('search');
+
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
@@ -29,6 +42,7 @@ export const Header = ({ setSearch }: HeaderProps) => {
         <input
           type="text"
           onChange={handleSearch}
+          defaultValue={searchParams.get('search')?.toString()}
           placeholder="Busque em suas notas..."
           className="w-full bg-transparent tracking-tight outline-none border-2 border-slate-700 rounded-full px-4 py-2 focus:border-slate-500 placeholder:text-slate-500"
         />

@@ -1,29 +1,17 @@
-'use client';
 import { getAllNotes } from '@/actions/notes';
 import { Header } from '@/components/header';
 import { NewNoteCard } from '@/components/new-note-card';
 import { NoteCard } from '@/components/note-card';
 import { Separator } from '@/components/separator';
-import { NoteDTO } from '@/dtos/NoteDTO';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
-export default function Home() {
-  const [notes, setNotes] = useState<NoteDTO[]>([] as NoteDTO[]);
-  const [search, setSearch] = useState('');
+interface HomeProps {
+  searchParams?: { search: string; page: string };
+}
 
-  const fetchNotes = async () => {
-    try {
-      const notes = await getAllNotes();
-      setNotes(notes);
-    } catch (error) {
-      toast.error('Erro ao buscar notas!');
-    }
-  };
+export default async function Home({ searchParams }: HomeProps) {
+  const notes = await getAllNotes();
 
-  useEffect(() => {
-    fetchNotes();
-  }, []);
+  const search = searchParams?.search || '';
 
   const filteredNotes =
     search !== ''
@@ -34,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <Header setSearch={setSearch} />
+      <Header />
 
       <main className="mx-auto max-w-6xl my-12 space-y-6 p-5">
         <div className="flex justify-center">
