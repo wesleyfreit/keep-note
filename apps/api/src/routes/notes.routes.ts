@@ -10,9 +10,11 @@ export const notesRoutes = async (app: FastifyInstance) => {
   });
 
   app.post('/', async (request, reply) => {
-    const { content } = createNoteBodySchema.parse(request.body);
+    const { content, title } = createNoteBodySchema.parse(request.body);
 
-    const note = await prisma.note.create({ data: { content } });
+    const note = await prisma.note.create({
+      data: { title: title ?? '', content: content ?? '' },
+    });
 
     return reply.status(201).send({ id: note.id });
   });
