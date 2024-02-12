@@ -1,4 +1,5 @@
 import { getAllNotes } from '@/actions/notes';
+import { EmptyNotes } from '@/components/empty-notes';
 import { Header } from '@/components/header';
 import { NewNoteCard } from '@/components/new-note-card';
 import { NoteCard } from '@/components/note-card';
@@ -29,13 +30,19 @@ export default async function Home({ searchParams }: HomeProps) {
           <NewNoteCard />
         </div>
 
-        <Separator />
+        {filteredNotes.length > 0 ? (
+          <>
+            <Separator />
 
-        <div className="grid grid-cols-3 gap-6 auto-rows-[258px]">
-          {filteredNotes.map((note) => (
-            <NoteCard key={note.id} note={note} />
-          ))}
-        </div>
+            <div className="grid grid-cols-3 gap-6 auto-rows-[258px]">
+              {filteredNotes.map((note) => (
+                <NoteCard key={note.id} note={note} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <EmptyNotes />
+        )}
       </main>
     </>
   );

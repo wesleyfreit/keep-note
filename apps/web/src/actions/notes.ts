@@ -3,6 +3,7 @@ import { NoteDTO } from '@/dtos/NoteDTO';
 import { AxiosError } from 'axios';
 import { revalidatePath } from 'next/cache';
 import { api } from '../services/api';
+import { NoteIdDTO } from '@/dtos/NoteIdDTO';
 
 export const getAllNotes = async () => {
   try {
@@ -13,14 +14,50 @@ export const getAllNotes = async () => {
   }
 };
 
-export const saveNote = async (title: string, content: string) => {
+export const saveNote = async (value: string, name: string) => {
+  const { title, content } =
+    name === 'title' ? { title: value, content: '' } : { title: '', content: value };
+
   try {
-    await api.post('/notes', { title, content });
+    const response = await api.post<NoteIdDTO>('/notes', { title, content });
+
+    const id = response.data.id;
+
     revalidatePath('/');
+
+    return id;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
     }
     throw new Error('Error saving note');
+  }
+};
+
+export const modifyNote = async (value: string, name: string, id: string) => {
+  const modified = name === 'title' ? { title: value } : { content: value };
+
+  try {
+    await api.put(`/notes/${id}`, { ...modified });
+
+    revalidatePath('/');
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw new Error('Error modifying note');
+  }
+};
+
+export const deleteNote = async (id: string) => {
+  try {
+    await api.delete(`/notes/${id}`);
+
+    revalidatePath('/');
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+    throw new Error('Error modifying note');
   }
 };

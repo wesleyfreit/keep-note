@@ -4,8 +4,10 @@ import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { X } from 'lucide-react';
 
+import { NoteDTO } from '@/dtos/NoteDTO';
+
 interface NoteCardProps {
-  note: { id: string; content: string; date: Date };
+  note: NoteDTO;
 }
 
 export const NoteCard = ({ note }: NoteCardProps) => {
@@ -13,7 +15,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
     <Dialog.Root>
       <Dialog.Trigger className="rounded-md bg-slate-800 text-left flex flex-col items-start p-5 space-y-4 overflow-hidden relative hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
         <span className="text-sm font-medium text-slate-300">
-          {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
+          {formatDistanceToNow(note.updatedAt, { locale: ptBR, addSuffix: true })}
         </span>
 
         <p className="text-sm leading-6 text-slate-400">{note.content}</p>
@@ -30,7 +32,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
 
             <div className="flex flex-1 flex-col gap-5 p-5">
               <span className="text-sm font-medium text-slate-300">
-                {formatDistanceToNow(note.date, { locale: ptBR, addSuffix: true })}
+                {formatDistanceToNow(note.updatedAt, { locale: ptBR, addSuffix: true })}
               </span>
 
               <div className="overflow-y-auto flex-grow h-20">

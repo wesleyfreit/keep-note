@@ -3,10 +3,6 @@ import { SearchIcon, User } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent } from 'react';
 
-// interface HeaderProps {
-//   setSearch: (query: string) => void;
-// }
-
 export const Header = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -14,7 +10,6 @@ export const Header = () => {
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
-    // setSearch(query);
     const params = new URLSearchParams(searchParams);
 
     if (query) {
