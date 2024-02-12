@@ -1,9 +1,9 @@
 'use server';
 import { NoteDTO } from '@/dtos/NoteDTO';
+import { NoteIdDTO } from '@/dtos/NoteIdDTO';
 import { AxiosError } from 'axios';
 import { revalidatePath } from 'next/cache';
 import { api } from '../services/api';
-import { NoteIdDTO } from '@/dtos/NoteIdDTO';
 
 export const getAllNotes = async () => {
   try {
@@ -11,6 +11,15 @@ export const getAllNotes = async () => {
     return response.data.notes;
   } catch (error) {
     throw new Error('Error fetching notes');
+  }
+};
+
+export const getNote = async (id: string) => {
+  try {
+    const response = await api.get<{ note: NoteDTO }>(`/notes/${id}`);
+    return response.data.note;
+  } catch (error) {
+    throw new Error('Error fetching note');
   }
 };
 

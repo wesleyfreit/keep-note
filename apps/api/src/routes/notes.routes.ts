@@ -5,9 +5,21 @@ import { FastifyInstance } from 'fastify';
 
 export const notesRoutes = async (app: FastifyInstance) => {
   app.get('/', async (request, reply) => {
-    const notes = await prisma.note.findMany();
+    const notes = await prisma.note.findMany({ orderBy: { updatedAt: 'desc' } });
 
     return reply.send({ notes });
+  });
+
+  app.get('/:id', async (request, reply) => {
+    const { id } = paramsSchema.parse(request.params);
+
+    const note = await prisma.note.findUnique({ where: { id } });
+
+    if (!note) {
+      return reply.status(404).send();
+    }
+
+    return reply.send({ note });
   });
 
   app.post('/', async (request, reply) => {
