@@ -2,7 +2,7 @@ import { getAllNotes } from '@/actions/notes';
 import { EmptyNotes } from '@/components/empty-notes';
 import { Header } from '@/components/header';
 import { NewNoteCard } from '@/components/new-note-card';
-import { NoteCard } from '@/components/note-card';
+import { ListNotes } from '@/components/list-notes';
 import { Separator } from '@/components/separator';
 
 interface HomeProps {
@@ -16,8 +16,10 @@ export default async function Home({ searchParams }: HomeProps) {
 
   const filteredNotes =
     search !== ''
-      ? notes.filter((note) =>
-          note.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+      ? notes.filter(
+          (note) =>
+            note.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
+            note.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
         )
       : notes;
 
@@ -34,14 +36,10 @@ export default async function Home({ searchParams }: HomeProps) {
           <>
             <Separator />
 
-            <div className="grid grid-cols-3 gap-6 auto-rows-[258px]">
-              {filteredNotes.map((note) => (
-                <NoteCard key={note.id} note={note} />
-              ))}
-            </div>
+            <ListNotes filteredNotes={filteredNotes} search={search} />
           </>
         ) : (
-          <EmptyNotes />
+          <EmptyNotes searchResult={search != '' ? true : false} />
         )}
       </main>
     </>
