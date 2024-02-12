@@ -7,6 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { modifyNote, saveNote } from '@/actions/notes';
 import { Separator } from './separator';
+import { revalidate } from '@/actions/app';
 
 export const NewNoteCard = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -28,6 +29,9 @@ export const NewNoteCard = () => {
       setOpen(false);
       setIsRecording(false);
       setNoteId(null);
+
+      toast.success('Nota salva com sucesso!');
+      revalidate('/');
     } else {
       setOpen(true);
     }
@@ -63,7 +67,7 @@ export const NewNoteCard = () => {
 
   return (
     <Dialog.Root open={open} onOpenChange={handleChangeOverlay}>
-      <Dialog.Trigger className="rounded-md bg-slate-700 text-left w-1/2 hover:ring-2 outline-none hover:ring-slate-500 focus-visible:ring-2 focus-visible:ring-lime-400">
+      <Dialog.Trigger className="rounded-md bg-slate-700 text-left w-1/2 hover:ring-2 outline-none hover:ring-slate-500 focus-visible:ring-2 focus-visible:ring-blue-500">
         <input
           type="text"
           tabIndex={-1}
@@ -98,27 +102,25 @@ export const NewNoteCard = () => {
                   <>
                     <span className="text-sm text-slate-400 font-medium flex justify-center items-center gap-1">
                       <div className="h-3 w-3 rounded-full bg-red-500 animate-pulse" />
-                      Gravando! (clique p/ interromper)
+                      Gravando! (clique p/ parar)
                     </span>
 
                     <button
                       onClick={handleStopRecording}
                       type="button"
-                      className="font-medium text-red-400 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+                      title="Parar gravação do áudio"
+                      className="font-medium text-red-500 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
                     >
                       <MicOff />
                     </button>
                   </>
                 ) : (
                   <>
-                    <span className="text-sm text-slate-400 font-medium">
-                      Gravar áudio! (clique p/ gravar)
-                    </span>
-
                     <button
                       onClick={handleStartRecording}
                       type="button"
-                      className="font-medium text-lime-400 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+                      title="Gravar áudio"
+                      className="font-medium text-green-500 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
                     >
                       <Mic />
                     </button>
@@ -133,11 +135,6 @@ export const NewNoteCard = () => {
             >
               Fechar
             </Dialog.Close>
-            {/* <button
-                type="button"
-                onClick={handleChangeOverlay}
-                className="text-center flex-grow outline-none text-sm font-medium bg-slate-800 text-slate-300 py-4 transition-colors hover:bg-slate-900"
-              ></button> */}
           </Dialog.Content>
         </Dialog.Overlay>
       </Dialog.Portal>

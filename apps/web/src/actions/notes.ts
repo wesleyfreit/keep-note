@@ -2,7 +2,6 @@
 import { NoteDTO } from '@/dtos/NoteDTO';
 import { NoteIdDTO } from '@/dtos/NoteIdDTO';
 import { AxiosError } from 'axios';
-import { revalidatePath } from 'next/cache';
 import { api } from '../services/api';
 
 export const getAllNotes = async () => {
@@ -32,8 +31,6 @@ export const saveNote = async (value: string, name: string) => {
 
     const id = response.data.id;
 
-    revalidatePath('/');
-
     return id;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -48,8 +45,6 @@ export const modifyNote = async (value: string, name: string, id: string) => {
 
   try {
     await api.put(`/notes/${id}`, { ...modified });
-
-    revalidatePath('/');
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
@@ -61,8 +56,6 @@ export const modifyNote = async (value: string, name: string, id: string) => {
 export const deleteNote = async (id: string) => {
   try {
     await api.delete(`/notes/${id}`);
-
-    revalidatePath('/');
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
