@@ -49,7 +49,7 @@ export const Header = () => {
           type="text"
           name="search"
           autoComplete="off"
-          title="Pesquisar em suas notas"
+          title="Digite para pesquisar em suas notas"
           onChange={handleSearch}
           defaultValue={searchParams.get('search')?.toString()}
           placeholder="Pesquisar..."

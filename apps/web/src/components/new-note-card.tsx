@@ -27,14 +27,11 @@ export const NewNoteCard = () => {
 
   const handleStartEditing = useDebouncedCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      console.log(value);
-
-      handleCreateNote(value);
+      handleCreateNote(event.target.value);
 
       event.target.value = '';
     },
-    750,
+    500,
   );
 
   const handleChangeOverlay = () => {
@@ -48,13 +45,12 @@ export const NewNoteCard = () => {
     <Dialog.Root open={open} onOpenChange={handleChangeOverlay}>
       <input
         type="text"
-        placeholder="Criar nova nota"
+        placeholder="Criar nova nota..."
         autoComplete="off"
-        title="Digite ou clique para criar uma nova nota"
+        title="Digite para criar uma nota"
         name="new-note"
         className="w-1/2 rounded-lg bg-slate-700 p-3 text-sm font-medium tracking-wide text-slate-200 shadow-sm shadow-black outline-none placeholder:text-slate-300 hover:ring-2 hover:ring-slate-500 focus-visible:ring-1 focus-visible:ring-slate-500"
         autoFocus
-        onClick={() => handleCreateNote('')}
         onChange={handleStartEditing}
       />
 
