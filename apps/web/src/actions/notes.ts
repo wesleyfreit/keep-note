@@ -1,6 +1,5 @@
 'use server';
-import { NoteDTO } from '@/dtos/NoteDTO';
-import { NoteIdDTO } from '@/dtos/NoteIdDTO';
+import { NoteDTO, NoteUpdateDTO } from '@/dtos/NoteDTO';
 import { AxiosError } from 'axios';
 import { api } from '../services/api';
 
@@ -27,11 +26,9 @@ export const saveNote = async (value: string, name: string) => {
     name === 'title' ? { title: value, content: '' } : { title: '', content: value };
 
   try {
-    const response = await api.post<NoteIdDTO>('/notes', { title, content });
+    const response = await api.post<{ note: NoteDTO }>('/notes', { title, content });
 
-    const id = response.data.id;
-
-    return id;
+    return response.data.note;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
@@ -44,7 +41,11 @@ export const modifyNote = async (value: string, name: string, id: string) => {
   const modified = name === 'title' ? { title: value } : { content: value };
 
   try {
-    await api.put(`/notes/${id}`, { ...modified });
+    const response = await api.put<NoteUpdateDTO>(`/notes/${id}`, { ...modified });
+
+    const updatedAt = response.data.updatedAt;
+
+    return updatedAt;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);

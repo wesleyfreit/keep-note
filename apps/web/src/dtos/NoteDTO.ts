@@ -4,3 +4,7 @@ export type NoteDTO = {
   content: string;
   updatedAt: Date;
 };
+
+export type NoteUpdateDTO = {
+  updatedAt: Date;
+};

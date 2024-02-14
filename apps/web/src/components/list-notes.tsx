@@ -4,6 +4,7 @@ import { NoteDTO } from '@/dtos/NoteDTO';
 import { useEffect, useState } from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { Spinner } from './spinner';
+import { EmptyNotes } from './empty-notes';
 
 interface ListNotesProps {
   filteredNotes: NoteDTO[];
@@ -26,6 +27,11 @@ export const ListNotes = ({ filteredNotes, search }: ListNotesProps) => {
           <Spinner />
         </div>
       )}
+
+      {filteredNotes.length <= 0 && !loading && (
+        <EmptyNotes searchResult={search != '' ? true : false} />
+      )}
+
       <ResponsiveMasonry
         columnsCountBreakPoints={{ 200: 1, 400: 2, 740: 3, 1080: 4 }}
         className={`transition-opacity duration-500 ${loading ? 'opacity-0 pointer-events-none absolute' : ''}`}

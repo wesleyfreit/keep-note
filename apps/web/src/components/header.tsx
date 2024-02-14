@@ -2,13 +2,14 @@
 import { SearchIcon, User } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 export const Header = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = useDebouncedCallback((event: ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     const params = new URLSearchParams(searchParams);
 
@@ -17,7 +18,7 @@ export const Header = () => {
     } else params.delete('search');
 
     router.replace(`${pathname}?${params.toString()}`);
-  };
+  }, 750);
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,10 +37,11 @@ export const Header = () => {
       <form onSubmit={handleSubmit} className="w-96 relative">
         <input
           type="text"
+          name="search"
           onChange={handleSearch}
           defaultValue={searchParams.get('search')?.toString()}
-          placeholder="Busque em suas notas..."
-          className="w-full bg-transparent tracking-tight outline-none border-2 border-slate-700 rounded-full px-4 py-2 focus:border-slate-500 placeholder:text-slate-500"
+          placeholder="Pesquisar..."
+          className="w-full bg-transparent pr-9 tracking-tight outline-none border-2 border-slate-700 rounded-full px-4 py-2 focus:border-slate-500 placeholder:text-slate-500"
         />
 
         <button

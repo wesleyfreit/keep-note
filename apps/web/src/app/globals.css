@@ -2,24 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* width */
+/* Disable highlight color on tap */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Scrollbar width */
 ::-webkit-scrollbar {
   width: 7px;
 }
 
-/* Track */
+/* Scrollbar track */
 ::-webkit-scrollbar-track {
   background: #010a1b98;
   border-radius: 5px;
 }
 
-/* Handle */
+/* Scrollbar handle */
 ::-webkit-scrollbar-thumb {
   background: #455674;
   border-radius: 5px;
 }
 
-/* Handle on hover */
+/* Scrollbar handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #56617c;
 }
