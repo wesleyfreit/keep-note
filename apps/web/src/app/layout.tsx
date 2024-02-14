@@ -7,7 +7,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Keep Note',
+  title: 'KeepNote',
   description: 'An application to keep notes',
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
           theme="dark"
           toastOptions={{
             style: {
-              filter: 'blur(0)',
+              filter: 'none',
               backdropFilter: 'none',
             },
           }}

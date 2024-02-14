@@ -66,7 +66,7 @@ export const NoteCard = ({ note, search }: NoteCardProps) => {
           )}
         </div>
 
-        <span className="text-xs font-medium text-slate-300 ml-auto pr-2 pb-1">
+        <span className="text-xs font-medium text-slate-400 ml-auto pr-2 pb-1">
           {formatDistanceToNow(note.updatedAt, { locale: ptBR, addSuffix: true })}
         </span>
       </Dialog.Trigger>
