@@ -9,8 +9,7 @@ export const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleSearch = useDebouncedCallback((event: ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value;
+  const setParams = (query: string) => {
     const params = new URLSearchParams(searchParams);
 
     if (query) {
@@ -18,11 +17,21 @@ export const Header = () => {
     } else params.delete('search');
 
     router.replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleSearch = useDebouncedCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+
+    setParams(query);
   }, 750);
 
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    event.stopPropagation();
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get('search')?.toString();
+
+    if (query) setParams(query);
+    else return;
   };
 
   return (
@@ -30,6 +39,7 @@ export const Header = () => {
       <a
         href="/"
         className="text-xl font-bold hover:underline outline-none focus-visible:underline"
+        title="Página inicial"
       >
         KeepNote
       </a>
@@ -38,6 +48,7 @@ export const Header = () => {
         <input
           type="text"
           name="search"
+          title="Digite para pesquisar em suas notas..."
           onChange={handleSearch}
           defaultValue={searchParams.get('search')?.toString()}
           placeholder="Pesquisar..."
@@ -46,6 +57,7 @@ export const Header = () => {
 
         <button
           type="submit"
+          title="Pesquisar"
           className="absolute right-0 translate-y-1 -translate-x-1 p-2 rounded-full hover:bg-slate-700 group outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
         >
           <SearchIcon className="w-5 h-5 text-slate-500 group-hover:text-slate-300" />
@@ -53,7 +65,10 @@ export const Header = () => {
       </form>
 
       <div className="flex items-center gap-3">
-        <button className="border-slate-700 text-slate-300 hover:bg-slate-700 border-2 p-2 rounded-full outline-none focus-visible:border-slate-500">
+        <button
+          title="Sua conta"
+          className="border-slate-700 text-slate-300 hover:bg-slate-700 border-2 p-2 rounded-full outline-none focus-visible:border-slate-500"
+        >
           <User className="text-slate-300" />
         </button>
       </div>

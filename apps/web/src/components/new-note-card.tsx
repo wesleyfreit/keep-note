@@ -1,6 +1,6 @@
 'use client';
 import * as Dialog from '@radix-ui/react-dialog';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { saveNote } from '@/actions/notes';
@@ -12,6 +12,12 @@ export const NewNoteCard = () => {
   const [note, setNote] = useState<NoteDTO | null>(null);
   const [checkCache, setCheckCache] = useState(false);
 
+  useEffect(() => {
+    if (!open) {
+      setNote(null);
+    }
+  }, [open]);
+
   const handleCreateNote = async (value: string) => {
     const noteCreated = await saveNote(value, 'content');
     setNote(noteCreated);
@@ -22,6 +28,7 @@ export const NewNoteCard = () => {
   const handleStartEditing = useDebouncedCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
+      console.log(value);
 
       handleCreateNote(value);
 
@@ -42,8 +49,9 @@ export const NewNoteCard = () => {
       <input
         type="text"
         placeholder="Criar nova nota"
+        title="Digite ou clique para criar uma nova nota"
         name="new-note"
-        className="text-sm font-medium rounded-lg bg-slate-700 w-1/2 hover:ring-2 outline-none hover:ring-slate-500 focus-visible:ring-1 shadow-sm shadow-black focus-visible:ring-slate-500 focus text-slate-200 p-3 tracking-wide placeholder:text-slate-300"
+        className="text-sm font-medium rounded-lg bg-slate-700 w-1/2 hover:ring-2 outline-none hover:ring-slate-500 focus-visible:ring-1 shadow-sm shadow-black focus-visible:ring-slate-500 text-slate-200 p-3 tracking-wide placeholder:text-slate-300"
         autoFocus
         onClick={() => handleCreateNote('')}
         onChange={handleStartEditing}
@@ -55,7 +63,6 @@ export const NewNoteCard = () => {
           checkCache={checkCache}
           setCheckCache={setCheckCache}
           setOpen={setOpen}
-          setNote={setNote}
         />
       )}
     </Dialog.Root>

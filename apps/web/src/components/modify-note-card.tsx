@@ -19,7 +19,6 @@ interface ModifyNoteCardProps {
   checkCache: boolean;
   setCheckCache: (value: boolean) => void;
   setOpen: (value: boolean) => void;
-  setNote?: (note: NoteDTO | null) => void;
 }
 
 export const ModifyNoteCard = ({
@@ -27,7 +26,6 @@ export const ModifyNoteCard = ({
   checkCache,
   setCheckCache,
   setOpen,
-  setNote,
 }: ModifyNoteCardProps) => {
   const [id] = useState(note.id);
   const [content, setContent] = useState(note.content);
@@ -152,7 +150,6 @@ export const ModifyNoteCard = ({
     try {
       await deleteNote(note.id);
 
-      if (setNote) setNote(null);
       setOpen(false);
       revalidate('/');
 
@@ -187,6 +184,7 @@ export const ModifyNoteCard = ({
             <input
               placeholder="Título"
               name="title"
+              title="Título da nota..."
               value={title}
               onFocus={(e) => e.preventDefault()}
               onChange={handleChangeTitle}
@@ -196,6 +194,7 @@ export const ModifyNoteCard = ({
             <textarea
               className="text-sm leading-6 pr-1 md:p-0 text-slate-200 resize-none w-full flex-1 bg-transparent outline-none"
               name="content"
+              title="Conteúdo da nota..."
               value={isRecording ? content + transcription : content}
               onChange={handleChangeContent}
               autoFocus
@@ -235,6 +234,8 @@ export const ModifyNoteCard = ({
                 )}
                 <button
                   onClick={handleDeleteNote}
+                  type="button"
+                  title="Apagar nota"
                   className="font-medium text-red-500 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
                 >
                   <Trash />
@@ -242,7 +243,10 @@ export const ModifyNoteCard = ({
               </div>
             </div>
           </div>
-          <Dialog.Close className="outline-none text-sm font-medium bg-slate-800 text-slate-300 py-4 transition-colors hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-slate-500 rounded-t-md">
+          <Dialog.Close
+            title="Fechar janela de edição"
+            className="outline-none text-sm font-medium bg-slate-800 text-slate-300 py-4 transition-colors hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-slate-500 rounded-t-md"
+          >
             Fechar
           </Dialog.Close>
         </Dialog.Content>
