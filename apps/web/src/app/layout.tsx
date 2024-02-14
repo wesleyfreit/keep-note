@@ -22,9 +22,13 @@ export default function RootLayout({
         <Toaster
           richColors
           expand
+          closeButton
           theme="dark"
           toastOptions={{
-            style: { filter: 'blur(0)' },
+            style: {
+              filter: 'blur(0)',
+              backdropFilter: 'none',
+            },
           }}
         />
         {children}
