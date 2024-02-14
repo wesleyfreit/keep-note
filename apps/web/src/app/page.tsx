@@ -26,7 +26,7 @@ export default async function Home({ searchParams }: HomeProps) {
     <>
       <Header />
 
-      <main className="mx-auto max-w-6xl my-2 space-y-6 p-5">
+      <main className="mx-auto my-2 max-w-6xl space-y-6 p-5">
         <div className="flex justify-center">
           <NewNoteCard />
         </div>

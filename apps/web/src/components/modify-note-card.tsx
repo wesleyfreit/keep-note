@@ -159,8 +159,10 @@ export const ModifyNoteCard = ({
     }
   };
 
-  const formatDate = (date: Date) => {
-    if (isToday(date)) {
+  const formatDate = (date: Date, createdAt?: boolean) => {
+    if (createdAt) {
+      return `Criada às ${format(date, "d 'de' MMM. 'de' y", { locale: ptBR })}`;
+    } else if (isToday(date)) {
       return `Editada ${format(date, 'HH:mm', { locale: ptBR })}`;
     } else if (isYesterday(date)) {
       return `Editada ontem, ${format(date, 'HH:mm', { locale: ptBR })}`;
@@ -178,8 +180,8 @@ export const ModifyNoteCard = ({
 
   return (
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 bg-black/50 flex items-center justify-center">
-        <Dialog.Content className="bg-slate-700 relative overflow-hidden md:rounded-md flex flex-col w-full h-full max-w-[640px] md:max-h-[60vh] outline-none overflow-y-auto">
+      <Dialog.Overlay className="fixed inset-0 flex items-center justify-center bg-black/50 data-[state=closed]:animate-[overlay-hide_300ms] data-[state=open]:animate-[overlay-show_200ms]">
+        <Dialog.Content className="relative flex size-full max-w-[640px] flex-col overflow-hidden overflow-y-auto bg-slate-700 outline-none data-[state=closed]:animate-[content-hide_200ms] data-[state=open]:animate-[content-show_200ms] md:max-h-[60vh] md:rounded-md">
           <div className="flex flex-1 flex-col gap-5 p-5">
             <input
               placeholder="Título"
@@ -188,12 +190,13 @@ export const ModifyNoteCard = ({
               value={title}
               onFocus={(e) => e.preventDefault()}
               onChange={handleChangeTitle}
-              className="font-medium text-slate-200 tracking-wide outline-none bg-transparent w-full"
+              className="w-full bg-transparent font-medium tracking-wide text-slate-200 outline-none"
             />
             <Separator />
             <textarea
-              className="text-sm leading-6 pr-1 md:p-0 text-slate-200 resize-none w-full flex-1 bg-transparent outline-none"
+              className="w-full flex-1 resize-none bg-transparent pr-1 text-sm leading-6 text-slate-200 outline-none md:p-0"
               name="content"
+              autoComplete="off"
               title="Conteúdo da nota..."
               value={isRecording ? content + transcription : content}
               onChange={handleChangeContent}
@@ -202,14 +205,17 @@ export const ModifyNoteCard = ({
               placeholder="Escreva um texto ou grave uma nota em áudio..."
             />
             <div className="flex items-center justify-between gap-1">
-              <span className="text-slate-400 text-sm font-medium">
+              <span
+                className="text-sm font-medium text-slate-400"
+                title={formatDate(note.createdAt, true)}
+              >
                 {formatDate(updatedAt as Date)}
               </span>
               <div className="flex gap-2">
                 {isRecording ? (
                   <>
-                    <span className="text-sm text-slate-400 font-medium flex justify-center items-center gap-1">
-                      <div className="h-3 w-3 rounded-full bg-red-500 animate-pulse" />
+                    <span className="flex items-center justify-center gap-1 text-sm font-medium text-slate-400">
+                      <div className="size-3 animate-pulse rounded-full bg-red-500" />
                       Gravando...
                     </span>
 
@@ -217,7 +223,7 @@ export const ModifyNoteCard = ({
                       onClick={handleStopRecording}
                       type="button"
                       title="Parar gravação do áudio"
-                      className="font-medium text-red-500 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+                      className="rounded-full p-2 font-medium text-red-500 outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500"
                     >
                       <MicOff />
                     </button>
@@ -227,7 +233,7 @@ export const ModifyNoteCard = ({
                     onClick={handleStartRecording}
                     type="button"
                     title="Gravar áudio"
-                    className="font-medium text-green-500 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+                    className="rounded-full p-2 font-medium text-green-500 outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500"
                   >
                     <Mic />
                   </button>
@@ -236,17 +242,14 @@ export const ModifyNoteCard = ({
                   onClick={handleDeleteNote}
                   type="button"
                   title="Apagar nota"
-                  className="font-medium text-red-500 p-2 hover:bg-slate-600 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+                  className="rounded-full p-2 font-medium text-red-500 outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500"
                 >
                   <Trash />
                 </button>
               </div>
             </div>
           </div>
-          <Dialog.Close
-            title="Fechar janela de edição"
-            className="outline-none text-sm font-medium bg-slate-800 text-slate-300 py-4 transition-colors hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-slate-500 rounded-t-md"
-          >
+          <Dialog.Close className="rounded-t-md bg-slate-800 py-4 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-slate-500">
             Fechar
           </Dialog.Close>
         </Dialog.Content>

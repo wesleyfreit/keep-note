@@ -35,39 +35,40 @@ export const Header = () => {
   };
 
   return (
-    <header className="px-6 py-3 flex items-center justify-between border-b border-b-slate-700 gap-5">
+    <header className="flex items-center justify-between gap-5 border-b border-b-slate-700 px-6 py-3">
       <a
         href="/"
-        className="text-xl font-bold hover:underline outline-none focus-visible:underline"
+        className="text-xl font-bold outline-none hover:underline focus-visible:underline"
         title="Página inicial"
       >
         KeepNote
       </a>
 
-      <form onSubmit={handleSubmit} className="w-96 relative">
+      <form onSubmit={handleSubmit} className="relative w-96">
         <input
           type="text"
           name="search"
-          title="Digite para pesquisar em suas notas..."
+          autoComplete="off"
+          title="Pesquisar em suas notas"
           onChange={handleSearch}
           defaultValue={searchParams.get('search')?.toString()}
           placeholder="Pesquisar..."
-          className="w-full bg-transparent pr-9 tracking-tight outline-none border-2 border-slate-700 rounded-full px-4 py-2 focus:border-slate-500 placeholder:text-slate-500"
+          className="w-full rounded-full border-2 border-slate-700 bg-transparent px-4 py-2 pr-9 tracking-tight outline-none placeholder:text-slate-500 focus:border-slate-500"
         />
 
         <button
           type="submit"
-          title="Pesquisar"
-          className="absolute right-0 translate-y-1 -translate-x-1 p-2 rounded-full hover:bg-slate-700 group outline-none focus-visible:ring-2 focus-visible:ring-slate-500"
+          title="Pesquisa"
+          className="group absolute right-0 -translate-x-1 translate-y-1 rounded-full p-2 outline-none hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-slate-500"
         >
-          <SearchIcon className="w-5 h-5 text-slate-500 group-hover:text-slate-300" />
+          <SearchIcon className="size-5 text-slate-500 group-hover:text-slate-300" />
         </button>
       </form>
 
       <div className="flex items-center gap-3">
         <button
           title="Sua conta"
-          className="border-slate-700 text-slate-300 hover:bg-slate-700 border-2 p-2 rounded-full outline-none focus-visible:border-slate-500"
+          className="rounded-full border-2 border-slate-700 p-2 text-slate-300 outline-none hover:bg-slate-700 focus-visible:border-slate-500"
         >
           <User className="text-slate-300" />
         </button>

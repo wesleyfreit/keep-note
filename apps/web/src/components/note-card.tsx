@@ -28,12 +28,12 @@ export const NoteCard = ({ note, search }: NoteCardProps) => {
 
   return (
     <Dialog.Root open={open} onOpenChange={handleChangeOverlay}>
-      <Dialog.Trigger className="rounded-md flex-shrink max-h-[258px] max-w-[22rem] bg-slate-800 bg-opacity-50 justify-between text-left flex flex-col items-start space-y-2 hover:ring-2 outline-none hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-blue-500 shadow-sm shadow-slate-950">
-        <div className="overflow-hidden space-y-3 p-5">
+      <Dialog.Trigger className="flex max-h-[258px] max-w-[22rem] shrink animate-[note-view_200ms] flex-col items-start justify-between space-y-2 rounded-md bg-slate-800 bg-opacity-[50%] text-left shadow-sm shadow-slate-950 outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-blue-500">
+        <div className="space-y-3 overflow-hidden p-5">
           {!search ? (
             <>
               <h1 className="font-medium tracking-wide">{note.title}</h1>
-              <p className="text-sm leading-6 text-slate-400 whitespace-pre-wrap">
+              <p className="whitespace-pre-wrap text-sm leading-6 text-slate-400">
                 {note.content}
               </p>
             </>
@@ -66,7 +66,7 @@ export const NoteCard = ({ note, search }: NoteCardProps) => {
           )}
         </div>
 
-        <span className="text-xs font-medium text-slate-400 ml-auto pr-2 pb-1">
+        <span className="ml-auto pb-1 pr-2 text-xs font-medium text-slate-400">
           {formatDistanceToNow(note.updatedAt, { locale: ptBR, addSuffix: true })}
         </span>
       </Dialog.Trigger>

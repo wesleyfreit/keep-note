@@ -49,9 +49,10 @@ export const NewNoteCard = () => {
       <input
         type="text"
         placeholder="Criar nova nota"
+        autoComplete="off"
         title="Digite ou clique para criar uma nova nota"
         name="new-note"
-        className="text-sm font-medium rounded-lg bg-slate-700 w-1/2 hover:ring-2 outline-none hover:ring-slate-500 focus-visible:ring-1 shadow-sm shadow-black focus-visible:ring-slate-500 text-slate-200 p-3 tracking-wide placeholder:text-slate-300"
+        className="w-1/2 rounded-lg bg-slate-700 p-3 text-sm font-medium tracking-wide text-slate-200 shadow-sm shadow-black outline-none placeholder:text-slate-300 hover:ring-2 hover:ring-slate-500 focus-visible:ring-1 focus-visible:ring-slate-500"
         autoFocus
         onClick={() => handleCreateNote('')}
         onChange={handleStartEditing}
