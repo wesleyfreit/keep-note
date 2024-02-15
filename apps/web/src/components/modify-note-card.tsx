@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { revalidate } from '@/actions/app';
-import { deleteNote, getNote, modifyNote } from '@/actions/notes';
+import { deleteNote, modifyNote } from '@/actions/notes';
 import { NoteDTO } from '@/dtos/NoteDTO';
 import { Separator } from './separator';
 
@@ -16,16 +16,16 @@ let speechRecognition: SpeechRecognition | null = null;
 
 interface ModifyNoteCardProps {
   note: NoteDTO;
+  open: boolean;
   checkCache: boolean;
   setCheckCache: (value: boolean) => void;
-  setOpen: (value: boolean) => void;
 }
 
 export const ModifyNoteCard = ({
   note,
+  open,
   checkCache,
   setCheckCache,
-  setOpen,
 }: ModifyNoteCardProps) => {
   const [id] = useState(note.id);
   const [content, setContent] = useState(note.content);
@@ -38,52 +38,50 @@ export const ModifyNoteCard = ({
   const autoRecoverUnsavedRecording = useCallback(async () => {
     if (speechRecognition) {
       speechRecognition.stop();
+      setIsRecording(false);
     }
 
     try {
-      await modifyNote(content + transcription, 'content', id);
-      toast.success('O conteúdo da gravação foi salvo!');
+      if (transcription !== '') {
+        toast.success('Conteúdo da gravação foi salvo!');
+        await modifyNote(content + transcription, 'content', id);
+        setTranscription('');
+      }
+
+      if (content !== note.content && content !== '' && transcription === '') {
+        await modifyNote(content, 'content', id);
+        toast.success('Conteúdo da nota foi salvo!');
+      }
+
+      if (title !== note.title && title !== '' && transcription === '') {
+        await modifyNote(title, 'title', id);
+        toast.success('Título da nota foi salvo!');
+      }
+
+      if (title === '' && content === '' && transcription === '') {
+        await deleteNote(id);
+        toast.info('Nota vazia descartada!');
+      }
+
+      setCheckCache(false);
     } catch (error) {
-      toast.error('Erro ao salvar o conteúdo da gravação!');
+      toast.error('Erro ao salvar dados não registrados da nota!');
     }
-
-    setCheckCache(false);
-    setIsRecording(false);
-    revalidate('/');
-  }, [content, id, setCheckCache, transcription]);
-
-  const autoDeleteEmptyNote = useCallback(async () => {
-    const savedNote = await getNote(id);
-
-    if (savedNote.content === '' && savedNote.title === '') {
-      await deleteNote(id);
-      toast.info('Nota vazia descartada!');
-    }
-
-    setCheckCache(false);
-    revalidate('/');
-  }, [id, setCheckCache]);
+  }, [transcription, content, note.content, note.title, title, setCheckCache, id]);
 
   useEffect(() => {
-    if (checkCache && isRecording) {
+    if (checkCache) {
       autoRecoverUnsavedRecording();
-    } else if (checkCache && !isRecording) {
-      autoDeleteEmptyNote();
+      revalidate('/');
     }
-  }, [checkCache, isRecording, autoRecoverUnsavedRecording, autoDeleteEmptyNote]);
-
-  useEffect(() => {
-    if (!isRecording && transcription !== '') {
-      setTranscription('');
-    }
-  }, [isRecording, transcription]);
+  }, [checkCache, autoRecoverUnsavedRecording]);
 
   const handleStartRecording = () => {
     const isSpeechRecognitionAvailable =
       'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
 
     if (!isSpeechRecognitionAvailable) {
-      toast.error('Seu navegador não suporta a gravação de áudio nativa!');
+      alert('Seu navegador não suporta a gravação de áudio nativa!');
       return;
     }
 
@@ -99,12 +97,20 @@ export const ModifyNoteCard = ({
     speechRecognition.maxAlternatives = 1;
     speechRecognition.interimResults = true;
 
+    let recognition = '';
+
     speechRecognition.onresult = (event) => {
-      const transcription = Array.from(event.results).reduce((text, result) => {
+      recognition = Array.from(event.results).reduce((text, result) => {
         return text.concat(result[0]?.transcript || '');
       }, '');
 
-      setTranscription(transcription);
+      setTranscription(recognition);
+    };
+
+    speechRecognition.onend = () => {
+      setTranscription('');
+      setContent((prevContent) => prevContent + recognition);
+      handleChangeNote(content + recognition, 'content');
     };
 
     speechRecognition.onerror = () => {
@@ -118,19 +124,17 @@ export const ModifyNoteCard = ({
     if (speechRecognition) {
       speechRecognition.stop();
     }
-
-    handleChangeNote(content + transcription, 'content');
-    setContent((prevContent) => prevContent + transcription);
-
     setIsRecording(false);
   };
 
   const handleChangeNote = useDebouncedCallback(async (value: string, name: string) => {
-    try {
-      const updatedAt = await modifyNote(value, name, note.id);
-      setUpdatedAt(updatedAt);
-    } catch (error) {
-      toast.error('Erro ao salvar a nota!');
+    if (open) {
+      try {
+        const updatedAt = await modifyNote(value, name, note.id);
+        setUpdatedAt(updatedAt);
+      } catch (error) {
+        toast.error('Erro ao salvar nota!');
+      }
     }
   }, 750);
 
@@ -150,12 +154,9 @@ export const ModifyNoteCard = ({
     try {
       await deleteNote(note.id);
 
-      setOpen(false);
-      revalidate('/');
-
-      toast.success('Nota apagada com sucesso!');
+      toast.warning('Nota foi apagada!');
     } catch (error) {
-      toast.error('Erro ao apagar a nota!');
+      toast.error('Erro ao apagar nota!');
     }
   };
 
@@ -184,26 +185,31 @@ export const ModifyNoteCard = ({
         <Dialog.Content className="relative flex size-full max-w-[640px] flex-col overflow-hidden overflow-y-auto bg-slate-700 outline-none data-[state=closed]:animate-[content-hide_200ms] data-[state=open]:animate-[content-show_200ms] md:max-h-[60vh] md:rounded-md">
           <div className="flex flex-1 flex-col gap-5 p-5">
             <input
-              placeholder="Título"
-              name="title"
-              title="Título da nota..."
-              value={title}
-              onFocus={(e) => e.preventDefault()}
-              onChange={handleChangeTitle}
               className="w-full bg-transparent font-medium tracking-wide text-slate-200 outline-none"
+              name="title"
+              autoComplete="off"
+              readOnly={isRecording ? true : false}
+              value={title}
+              title="Título da nota..."
+              onChange={handleChangeTitle}
+              placeholder="Título"
             />
+
             <Separator />
+
             <textarea
               className="w-full flex-1 resize-none bg-transparent pr-1 text-sm leading-6 text-slate-200 outline-none md:p-0"
               name="content"
               autoComplete="off"
               title="Conteúdo da nota..."
-              value={isRecording ? content + transcription : content}
+              readOnly={isRecording ? true : false}
+              value={transcription != '' ? content + transcription : content}
               onChange={handleChangeContent}
               autoFocus
               onFocus={setEndOfContent}
               placeholder="Escreva um texto ou grave uma nota em áudio..."
             />
+
             <div className="flex items-center justify-between gap-1">
               <span
                 className="text-sm font-medium text-slate-400"
@@ -211,44 +217,34 @@ export const ModifyNoteCard = ({
               >
                 {formatDate(updatedAt as Date)}
               </span>
-              <div className="flex gap-2">
-                {isRecording ? (
-                  <>
-                    <span className="flex items-center justify-center gap-1 text-sm font-medium text-slate-400">
-                      <div className="size-3 animate-pulse rounded-full bg-red-500" />
-                      Gravando...
-                    </span>
 
-                    <button
-                      onClick={handleStopRecording}
-                      type="button"
-                      title="Parar gravação do áudio"
-                      className="rounded-full p-2 font-medium text-red-500 outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500"
-                    >
-                      <MicOff />
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={handleStartRecording}
-                    type="button"
-                    title="Gravar áudio"
-                    className="rounded-full p-2 font-medium text-green-500 outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500"
-                  >
-                    <Mic />
-                  </button>
+              <div className="flex gap-2">
+                {isRecording && (
+                  <span className="flex items-center justify-center gap-1 text-sm font-medium text-slate-400">
+                    <div className="size-3 animate-pulse rounded-full bg-red-500" />
+                    Gravando...
+                  </span>
                 )}
+
                 <button
+                  onClick={!isRecording ? handleStartRecording : handleStopRecording}
+                  title={!isRecording ? 'Gravar áudio' : 'Parar gravação do áudio'}
+                  className={`rounded-full p-2 font-medium ${!isRecording ? 'text-green-500' : 'text-red-500'} outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500`}
+                >
+                  {!isRecording ? <Mic /> : <MicOff />}
+                </button>
+
+                <Dialog.Close
                   onClick={handleDeleteNote}
-                  type="button"
                   title="Apagar nota"
                   className="rounded-full p-2 font-medium text-red-500 outline-none hover:bg-slate-600 focus-visible:ring-2 focus-visible:ring-slate-500"
                 >
                   <Trash />
-                </button>
+                </Dialog.Close>
               </div>
             </div>
           </div>
+
           <Dialog.Close className="rounded-t-md bg-slate-800 py-4 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-slate-500">
             Fechar
           </Dialog.Close>

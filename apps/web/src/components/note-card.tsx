@@ -51,7 +51,7 @@ export const NoteCard = ({ note, search }: NoteCardProps) => {
                 )}
               </h1>
 
-              <p className="text-sm leading-6 text-slate-400">
+              <p className="whitespace-pre-wrap text-sm leading-6 text-slate-400">
                 {contentParts.map((part, i) =>
                   part.toLowerCase() === search.toLowerCase() ? (
                     <span key={i} className="bg-yellow-600">
@@ -66,16 +66,19 @@ export const NoteCard = ({ note, search }: NoteCardProps) => {
           )}
         </div>
 
-        <span className="ml-auto pb-1 pr-2 text-xs font-medium text-slate-400">
+        <span
+          className="ml-auto pb-1 pr-2 text-xs font-medium text-slate-400"
+          suppressHydrationWarning={true}
+        >
           {formatDistanceToNow(note.updatedAt, { locale: ptBR, addSuffix: true })}
         </span>
       </Dialog.Trigger>
 
       <ModifyNoteCard
         note={note}
+        open={open}
         checkCache={checkCache}
         setCheckCache={setCheckCache}
-        setOpen={setOpen}
       />
     </Dialog.Root>
   );

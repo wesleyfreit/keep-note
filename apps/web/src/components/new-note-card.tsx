@@ -13,10 +13,10 @@ export const NewNoteCard = () => {
   const [checkCache, setCheckCache] = useState(false);
 
   useEffect(() => {
-    if (!open) {
+    if (!checkCache) {
       setNote(null);
     }
-  }, [open]);
+  }, [checkCache]);
 
   const handleCreateNote = async (value: string) => {
     const noteCreated = await saveNote(value, 'content');
@@ -31,7 +31,7 @@ export const NewNoteCard = () => {
 
       event.target.value = '';
     },
-    500,
+    750,
   );
 
   const handleChangeOverlay = () => {
@@ -57,9 +57,9 @@ export const NewNoteCard = () => {
       {note && (
         <ModifyNoteCard
           note={note}
+          open={open}
           checkCache={checkCache}
           setCheckCache={setCheckCache}
-          setOpen={setOpen}
         />
       )}
     </Dialog.Root>
