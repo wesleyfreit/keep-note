@@ -1,4 +1,4 @@
-import { envSchema } from '@/validation/envSchema';
+import { envSchema } from '@/validation/env-schema';
 
 const _env = envSchema.safeParse(process.env);
 

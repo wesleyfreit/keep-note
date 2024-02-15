@@ -3,6 +3,7 @@ import fastify from 'fastify';
 import { ZodError } from 'zod';
 import { env } from './env';
 import { notesRoutes } from './routes/notes.routes';
+import { usersRoutes } from './routes/users.routes';
 
 export const app = fastify();
 
@@ -32,4 +33,5 @@ app.setErrorHandler((error, request, reply) => {
   }
 });
 
+app.register(usersRoutes);
 app.register(notesRoutes, { prefix: '/notes' });

@@ -1,6 +1,6 @@
-import { prisma } from '@/lib/prisma';
-import { noteBodySchema } from '@/validation/notesSchema';
-import { paramsSchema } from '@/validation/paramsSchema';
+import { prisma } from '@/lib/prisma-client';
+import { noteBodySchema } from '@/validation/notes-schema';
+import { paramsSchema } from '@/validation/params-schema';
 import { FastifyInstance } from 'fastify';
 
 export const notesRoutes = async (app: FastifyInstance) => {

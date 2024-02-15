@@ -5,9 +5,9 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
-import { prisma } from '@/lib/prisma';
-import { auth } from '@/services/firebase';
-import { createUserBodySchema, loginUserBodySchema } from '@/validation/usersSchema';
+import { prisma } from '@/lib/prisma-client';
+import { auth } from '@/services/firebase-auth';
+import { createUserBodySchema, loginUserBodySchema } from '@/validation/users-schema';
 
 export const usersRoutes = async (app: FastifyInstance) => {
   app.post('/signup', async (request, reply) => {
