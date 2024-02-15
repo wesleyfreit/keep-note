@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
+import { emailValidator } from '@/lib/email-validator';
 import { prisma } from '@/lib/prisma-client';
 import { auth } from '@/services/firebase-auth';
 import { createUserBodySchema, loginUserBodySchema } from '@/validation/users-schema';
@@ -18,7 +19,13 @@ export const usersRoutes = async (app: FastifyInstance) => {
     });
 
     if (userByEmail) {
-      return reply.status(400).send({ error: 'User already exists' });
+      return reply.status(409).send({ error: 'User already exists' });
+    }
+
+    const isValidEmail = await emailValidator(email);
+
+    if (!isValidEmail.valid && isValidEmail.reason !== 'smtp') {
+      return reply.status(400).send({ error: 'Invalid email' });
     }
 
     const [{ user }, { id }] = await Promise.all([
