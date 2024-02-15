@@ -2,10 +2,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { NoteDTO } from '@/dtos/NoteDTO';
 import { ModifyNoteCard } from './modify-note-card';
+import { revalidate } from '@/actions/app';
 
 interface NoteCardProps {
   note: NoteDTO;
@@ -16,10 +18,33 @@ export const NoteCard = ({ note, search }: NoteCardProps) => {
   const [open, setOpen] = useState(false);
   const [checkCache, setCheckCache] = useState(false);
 
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const noteId = searchParams.get('id');
+    if (noteId === note.id) {
+      setOpen(true);
+    }
+  }, [note, searchParams]);
+
   const handleChangeOverlay = () => {
     if (open) {
       setCheckCache(true);
     }
+
+    if (note) {
+      const params = new URLSearchParams(searchParams);
+
+      if (!open) {
+        params.set('id', note.id);
+      } else params.delete('id');
+
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+
+    revalidate('/');
     setOpen(!open);
   };
 
