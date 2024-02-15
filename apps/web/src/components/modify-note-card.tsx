@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { revalidate } from '@/actions/app';
-import { deleteNote, modifyNote } from '@/actions/notes';
+import { deleteNote, getNote, modifyNote } from '@/actions/notes';
 import { NoteDTO } from '@/dtos/NoteDTO';
 import { Separator } from './separator';
 
@@ -35,33 +35,49 @@ export const ModifyNoteCard = ({
   const [isRecording, setIsRecording] = useState(false);
   const [transcription, setTranscription] = useState('');
 
-  const autoRecoverUnsavedRecording = useCallback(async () => {
+  const autoRecoverUnsavedNote = useCallback(async () => {
     if (speechRecognition) {
       speechRecognition.stop();
       setIsRecording(false);
     }
 
+    let shouldRevalidate = false;
+
     try {
       if (transcription !== '') {
-        toast.success('Conteúdo da gravação foi salvo!');
         await modifyNote(content + transcription, 'content', id);
+
         setTranscription('');
+        toast.success('Conteúdo da gravação salvo!');
+        shouldRevalidate = true;
+      } else {
+        if (content !== '' || title !== '') {
+          if (content !== note.content || title !== note.title) {
+            const note = await getNote(id);
+
+            if (title !== note.title) {
+              await modifyNote(title, 'title', id);
+
+              toast.success('Título da nota salvo!');
+              shouldRevalidate = true;
+            }
+
+            if (content !== note.content) {
+              await modifyNote(content, 'content', id);
+
+              toast.success('Conteúdo da nota salvo!');
+              shouldRevalidate = true;
+            }
+          }
+        } else {
+          await deleteNote(id);
+
+          toast.info('Nota vazia descartada!');
+          shouldRevalidate = true;
+        }
       }
 
-      if (content !== note.content && content !== '' && transcription === '') {
-        await modifyNote(content, 'content', id);
-        toast.success('Conteúdo da nota foi salvo!');
-      }
-
-      if (title !== note.title && title !== '' && transcription === '') {
-        await modifyNote(title, 'title', id);
-        toast.success('Título da nota foi salvo!');
-      }
-
-      if (title === '' && content === '' && transcription === '') {
-        await deleteNote(id);
-        toast.info('Nota vazia descartada!');
-      }
+      if (shouldRevalidate) revalidate('/');
 
       setCheckCache(false);
     } catch (error) {
@@ -71,10 +87,9 @@ export const ModifyNoteCard = ({
 
   useEffect(() => {
     if (checkCache) {
-      autoRecoverUnsavedRecording();
-      revalidate('/');
+      autoRecoverUnsavedNote();
     }
-  }, [checkCache, autoRecoverUnsavedRecording]);
+  }, [checkCache, autoRecoverUnsavedNote]);
 
   const handleStartRecording = () => {
     const isSpeechRecognitionAvailable =
@@ -153,7 +168,6 @@ export const ModifyNoteCard = ({
   const handleDeleteNote = async () => {
     try {
       await deleteNote(note.id);
-
       toast.warning('Nota foi apagada!');
     } catch (error) {
       toast.error('Erro ao apagar nota!');

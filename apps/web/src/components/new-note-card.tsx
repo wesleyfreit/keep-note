@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
+import { revalidate } from '@/actions/app';
 import { saveNote } from '@/actions/notes';
 import { NoteDTO } from '@/dtos/NoteDTO';
 import { ModifyNoteCard } from './modify-note-card';
@@ -38,6 +39,8 @@ export const NewNoteCard = () => {
     if (open) {
       setCheckCache(true);
     }
+
+    revalidate('/');
     setOpen(!open);
   };
 
