@@ -35,40 +35,58 @@ export const usersRoutes = async (app: FastifyInstance) => {
 
     if (user.email) {
       await sendEmailVerification(user);
-      return reply.status(201).send({ user_id: id });
+      return reply.status(201).send({ user_id: id, message: 'Email verification sent' });
     }
   });
 
-  app.post('/signin', async (request, reply) => {
-    const { email, password } = loginUserBodySchema.parse(request.body);
+  app.post(
+    '/signin',
+    {
+      config: {
+        rateLimit: {
+          max: 1,
+          timeWindow: '1 minute',
+          onExceeded: () => {
+            return { error: 'Rate limit exceeded' };
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const { email, password } = loginUserBodySchema.parse(request.body);
 
-    try {
-      const userByEmail = await prisma.user.findFirst({
-        where: { email: { equals: email, mode: 'insensitive' } },
-      });
+      try {
+        const userByEmail = await prisma.user.findFirst({
+          where: { email: { equals: email, mode: 'insensitive' } },
+        });
 
-      if (userByEmail) {
-        const { user } = await signInWithEmailAndPassword(auth, email, password);
+        if (userByEmail) {
+          const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-        if (!user.emailVerified) {
-          await sendEmailVerification(user);
+          if (!user.emailVerified) {
+            await sendEmailVerification(user);
 
-          return reply
-            .status(401)
-            .send({ error: 'Email is not verified, email verification sent' });
+            return reply
+              .status(401)
+              .send({ error: 'Email is not verified, email verification sent' });
+          }
+
+          return reply.send({ user_id: userByEmail.id });
         }
+        return reply.status(404).send({ error: 'User does not exist' });
+      } catch (error) {
+        if (error && typeof error === 'object' && 'code' in error) {
+          const errorCode = error.code;
 
-        return reply.send({ user_id: userByEmail.id });
-      }
-      return reply.status(404).send({ error: 'User does not exist' });
-    } catch (error) {
-      if (error && typeof error === 'object' && 'code' in error) {
-        const errorCode = error.code;
+          if (errorCode === 'auth/invalid-credential')
+            return reply.status(401).send({ error: 'Invalid credentials' });
 
-        if (errorCode === 'auth/invalid-credential')
-          return reply.status(401).send({ error: 'Invalid credentials' });
+          if (errorCode === 'auth/too-many-requests')
+            return reply.status(429).send({ error: 'Too many requests' });
+        }
+        console.log(error);
+        return reply.status(500).send({ error: 'Internal server error' });
       }
-      return reply.status(500).send({ error: 'Internal Server error' });
-    }
-  });
+    },
+  );
 };
