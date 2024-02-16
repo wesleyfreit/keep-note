@@ -60,7 +60,7 @@ export const usersRoutes = async (app: FastifyInstance) => {
 
         const token = app.jwt.sign({}, { expiresIn: '1h', sub: userByEmail.id });
 
-        return reply.send({ user_id: userByEmail.id, token });
+        return reply.send({ user: userByEmail, token });
       }
       return reply.status(404).send({ error: 'User does not exist' });
     } catch (error) {
