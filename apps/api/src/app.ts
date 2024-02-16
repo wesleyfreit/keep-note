@@ -1,5 +1,5 @@
 import cors from '@fastify/cors';
-import rate_limit from '@fastify/rate-limit';
+import jwt from '@fastify/jwt';
 import fastify from 'fastify';
 import { ZodError } from 'zod';
 
@@ -13,31 +13,28 @@ app.register(cors, {
   origin: env.ORIGIN_URL,
 });
 
-app.register(rate_limit);
+app.register(jwt, {
+  secret: env.JWT_SECRET,
+});
 
-if (env.NODE_ENV === 'dev') {
+if (env.NODE_ENV !== 'production') {
   app.addHook('preHandler', async (request) => {
     console.log(`[${request.method}] ${request.url}`);
   });
 }
 
-app.setErrorHandler((error, request, reply) => {
+app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
-    const errorObject = error.errors.reduce((acc: { [key: string]: string }, err) => {
-      if (err.path[0] !== undefined) {
-        const path = err.path[0];
-        acc[path] = err.message;
-      }
-      return acc;
-    }, {});
-
-    reply.status(400).send({ error: errorObject });
-  } else if (error && typeof error === 'object' && 'statusCode' in error) {
-    const errorCode = error.statusCode as number;
-    reply.status(errorCode).send({ error: error.message });
-  } else {
-    reply.status(500).send({ error: 'Internal server error' });
+    return reply.status(400).send({ error: 'Validation error.', issues: error.format() });
   }
+
+  if (env.NODE_ENV !== 'production') {
+    console.error(error);
+  } else {
+    // TODO: Here we should log to a external tool like DataDog/NewRelic/Sentry
+  }
+
+  return reply.status(500).send({ error: 'Internal server error.' });
 });
 
 app.register(usersRoutes);

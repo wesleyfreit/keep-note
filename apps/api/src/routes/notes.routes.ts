@@ -1,9 +1,15 @@
 import { prisma } from '@/lib/prisma-client';
+import { userAuth } from '@/middlewares/user-auth';
+import { userValidation } from '@/middlewares/user-validation';
 import { noteBodySchema } from '@/validation/notes-schema';
 import { paramsSchema } from '@/validation/params-schema';
 import { FastifyInstance } from 'fastify';
 
 export const notesRoutes = async (app: FastifyInstance) => {
+  app.addHook('preHandler', userAuth);
+
+  app.addHook('preHandler', userValidation);
+
   app.get('/', async (request, reply) => {
     const notes = await prisma.note.findMany({ orderBy: { updatedAt: 'desc' } });
 
