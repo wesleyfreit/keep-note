@@ -9,13 +9,13 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { revalidate } from '@/actions/app';
 import { deleteNote, getNote, modifyNote } from '@/actions/notes';
-import { NoteDTO } from '@/dtos/NoteDTO';
+import { INote } from '@/dtos/note';
 import { Separator } from './separator';
 
 let speechRecognition: SpeechRecognition | null = null;
 
 interface ModifyNoteCardProps {
-  note: NoteDTO;
+  note: INote;
   open: boolean;
   checkCache: boolean;
   setCheckCache: (value: boolean) => void;

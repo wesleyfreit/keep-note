@@ -5,12 +5,12 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { revalidate } from '@/actions/app';
 import { saveNote } from '@/actions/notes';
-import { NoteDTO } from '@/dtos/NoteDTO';
+import { INote } from '@/dtos/note';
 import { ModifyNoteCard } from './modify-note-card';
 
 export const NewNoteCard = () => {
   const [open, setOpen] = useState(false);
-  const [note, setNote] = useState<NoteDTO | null>(null);
+  const [note, setNote] = useState<INote | null>(null);
   const [checkCache, setCheckCache] = useState(false);
 
   useEffect(() => {

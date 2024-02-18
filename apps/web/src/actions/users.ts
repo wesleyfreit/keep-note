@@ -1,5 +1,5 @@
 'use server';
-import { UserDTO } from '@/dtos/UserDTO';
+import { IUser } from '@/dtos/user';
 import { AxiosError } from 'axios';
 import { api } from '../services/api';
 
@@ -16,7 +16,7 @@ export const signUp = async (name: string, email: string, password: string) => {
 
 export const signIn = async (email: string, password: string) => {
   try {
-    const response = await api.post<UserDTO>('/signin', { email, password });
+    const response = await api.post<IUser>('/signin', { email, password });
 
     return response.data;
   } catch (error) {

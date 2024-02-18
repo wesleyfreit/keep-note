@@ -5,12 +5,12 @@ import { ptBR } from 'date-fns/locale';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { NoteDTO } from '@/dtos/NoteDTO';
-import { ModifyNoteCard } from './modify-note-card';
 import { revalidate } from '@/actions/app';
+import { INote } from '@/dtos/note';
+import { ModifyNoteCard } from './modify-note-card';
 
 interface NoteCardProps {
-  note: NoteDTO;
+  note: INote;
   search: string | undefined;
 }
 

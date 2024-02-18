@@ -1,11 +1,12 @@
 'use server';
-import { NoteDTO, NoteUpdateDTO } from '@/dtos/NoteDTO';
+
 import { AxiosError } from 'axios';
 import { api } from '../services/api';
+import { INote, INoteUpdated } from '@/dtos/note';
 
 export const getAllNotes = async () => {
   try {
-    const response = await api.get<{ notes: NoteDTO[] }>('/notes');
+    const response = await api.get<{ notes: INote[] }>('/notes');
     return response.data.notes;
   } catch (error) {
     throw new Error('Error fetching notes');
@@ -14,7 +15,7 @@ export const getAllNotes = async () => {
 
 export const getNote = async (id: string) => {
   try {
-    const response = await api.get<{ note: NoteDTO }>(`/notes/${id}`);
+    const response = await api.get<{ note: INote }>(`/notes/${id}`);
     return response.data.note;
   } catch (error) {
     throw new Error('Error fetching note');
@@ -26,7 +27,7 @@ export const saveNote = async (value: string, name: string) => {
     name === 'title' ? { title: value, content: '' } : { title: '', content: value };
 
   try {
-    const response = await api.post<{ note: NoteDTO }>('/notes', { title, content });
+    const response = await api.post<{ note: INote }>('/notes', { title, content });
 
     return response.data.note;
   } catch (error) {
@@ -41,7 +42,7 @@ export const modifyNote = async (value: string, name: string, id: string) => {
   const modified = name === 'title' ? { title: value } : { content: value };
 
   try {
-    const response = await api.put<NoteUpdateDTO>(`/notes/${id}`, { ...modified });
+    const response = await api.put<INoteUpdated>(`/notes/${id}`, { ...modified });
 
     const updatedAt = response.data.updatedAt;
 

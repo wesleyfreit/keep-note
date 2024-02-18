@@ -1,13 +1,13 @@
 'use client';
 import { NoteCard } from '@/components/note-card';
-import { NoteDTO } from '@/dtos/NoteDTO';
+import { INote } from '@/dtos/note';
 import { useEffect, useState } from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { EmptyNotes } from './empty-notes';
 import { Spinner } from './spinner';
 
 interface ListNotesProps {
-  filteredNotes: NoteDTO[];
+  filteredNotes: INote[];
   search: string;
 }
 

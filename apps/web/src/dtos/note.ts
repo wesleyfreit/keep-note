@@ -1,4 +1,4 @@
-export type NoteDTO = {
+export type INote = {
   id: string;
   title: string;
   content: string;
@@ -6,6 +6,6 @@ export type NoteDTO = {
   updatedAt: Date;
 };
 
-export type NoteUpdateDTO = {
+export type INoteUpdated = {
   updatedAt: Date;
 };
