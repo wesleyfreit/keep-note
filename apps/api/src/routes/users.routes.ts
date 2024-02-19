@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { FirebaseError } from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -7,9 +8,10 @@ import {
 
 import { emailValidator } from '@/lib/email-validator';
 import { prisma } from '@/lib/prisma-client';
+import { userAuth } from '@/middlewares/user-auth';
+import { userValidation } from '@/middlewares/user-validation';
 import { auth } from '@/services/firebase-auth';
 import { createUserBodySchema, loginUserBodySchema } from '@/validation/users-schema';
-import { FirebaseError } from 'firebase/app';
 
 export const usersRoutes = async (app: FastifyInstance) => {
   app.post('/signup', async (request, reply) => {
@@ -73,6 +75,20 @@ export const usersRoutes = async (app: FastifyInstance) => {
         if (errorCode === 'auth/too-many-requests')
           return reply.status(429).send({ error: 'Too many requests' });
       }
+    }
+  });
+
+  app.get('/user', { preHandler: [userAuth, userValidation] }, async (request, reply) => {
+    const userRequest = request.user;
+
+    const userById = await prisma.user.findUnique({
+      where: { id: userRequest.sub },
+    });
+
+    if (userById) {
+      const token = app.jwt.sign({}, { expiresIn: '1h', sub: userById.id });
+
+      return reply.send({ user: userById, token });
     }
   });
 };

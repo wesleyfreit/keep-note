@@ -6,6 +6,6 @@ export const userValidation = async (request: FastifyRequest, reply: FastifyRepl
   const user = await prisma.user.findUnique({ where: { id: userId } });
 
   if (!user) {
-    return reply.status(401).send({ error: 'Not authorized' });
+    return reply.status(401).send({ error: 'Unauthorized' });
   }
 };

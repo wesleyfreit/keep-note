@@ -1,15 +1,22 @@
 'use server';
 
+import { INote, INoteUpdated } from '@/dtos/note';
 import { AxiosError } from 'axios';
 import { api } from '../services/api';
-import { INote, INoteUpdated } from '@/dtos/note';
 
 export const getAllNotes = async () => {
   try {
     const response = await api.get<{ notes: INote[] }>('/notes');
     return response.data.notes;
   } catch (error) {
-    throw new Error('Error fetching notes');
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data.error;
+      if (errorMessage === 'Unauthorized') {
+        return undefined;
+      } else {
+        throw new Error('Error fetching notes');
+      }
+    }
   }
 };
 

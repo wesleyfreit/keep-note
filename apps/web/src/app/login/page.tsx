@@ -1,27 +1,15 @@
-'use client';
-import { Input } from '@/components/input';
+import { hasAuthToken } from '@/actions/auth';
+import { LoginForm } from '@/components/login-form';
 import { WelcomeSection } from '@/components/welcome-section';
-import { ISignIn, signInSchema } from '@/validation/signin-schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { redirect } from 'next/navigation';
 
-export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ISignIn>({
-    resolver: zodResolver(signInSchema),
-  });
+export default async function Login() {
+  const authToken = await hasAuthToken();
 
-  const router = useRouter();
-
-  const handleSignUp = async (data: ISignIn) => {
-    console.log(data);
-  };
+  if (authToken) {
+    redirect('/');
+  }
 
   return (
     <div className="flex h-screen">
@@ -33,50 +21,7 @@ export default function Login() {
           <h1 className="text-3xl font-bold">KeepNote</h1>
         </div>
 
-        <form
-          onSubmit={handleSubmit(handleSignUp)}
-          className="mx-auto flex w-full max-w-lg flex-col space-y-5 p-5 md:p-10"
-        >
-          <div>
-            <h1 className="text-3xl font-semibold leading-relaxed">Fazer login</h1>
-
-            <span>
-              Não têm uma conta?{' '}
-              <Link
-                href="/signup"
-                onClick={() => router.push('/signup')}
-                className="font-bold text-blue-500 underline hover:text-blue-600"
-              >
-                Crie uma!
-              </Link>
-            </span>
-          </div>
-
-          <Input
-            register={register}
-            errors={errors}
-            name="email"
-            label="Email"
-            placeholder="Insira seu email"
-            type="email"
-          />
-
-          <Input
-            register={register}
-            errors={errors}
-            name="password"
-            label="Senha"
-            placeholder="Insira sua senha"
-            type="password"
-          />
-
-          <button
-            className="rounded-full bg-blue-800 py-3 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500"
-            type="submit"
-          >
-            Entrar
-          </button>
-        </form>
+        <LoginForm />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/contexts/auth';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
@@ -18,20 +19,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} bg-slate-900 text-slate-50 antialiased`}>
-        <Toaster
-          richColors
-          expand
-          closeButton
-          theme="dark"
-          toastOptions={{
-            style: {
-              willChange: 'unset',
-            },
-          }}
-        />
-        {children}
-      </body>
+      <AuthProvider>
+        <body className={`${inter.className} bg-slate-900 text-slate-50 antialiased`}>
+          <Toaster
+            richColors
+            expand
+            closeButton
+            theme="dark"
+            toastOptions={{
+              style: {
+                willChange: 'unset',
+              },
+            }}
+          />
+          {children}
+        </body>
+      </AuthProvider>
     </html>
   );
 }

@@ -11,7 +11,12 @@ export const notesRoutes = async (app: FastifyInstance) => {
   app.addHook('preHandler', userValidation);
 
   app.get('/', async (request, reply) => {
-    const notes = await prisma.note.findMany({ orderBy: { updatedAt: 'desc' } });
+    const userRequest = request.user;
+
+    const notes = await prisma.note.findMany({
+      where: { id: userRequest.sub },
+      orderBy: { updatedAt: 'desc' },
+    });
 
     return reply.send({ notes });
   });
