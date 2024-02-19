@@ -9,9 +9,18 @@ export const signUp = async (name: string, email: string, password: string) => {
     await api.post('/signup', { name, email, password });
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.error);
+      const errorMessage = error.response?.data.error;
+
+      console.log(errorMessage);
+      switch (errorMessage) {
+        case 'User already exists':
+          throw new Error('Este email já está cadastrado.');
+        case 'Invalid email':
+          throw new Error('O email inserido é inválido!');
+        default:
+          throw new Error('Erro ao criar a conta!');
+      }
     }
-    throw new Error('Error creating user');
   }
 };
 
@@ -32,15 +41,17 @@ export const signIn = async (email: string, password: string) => {
       const errorMessage = error.response?.data.error;
       switch (errorMessage) {
         case 'Email is not verified':
-          throw new Error('Email não verificado');
+          throw new Error(
+            'Email não verificado, um novo link de confirmação foi enviado.',
+          );
         case 'User does not exist':
-          throw new Error('Usuário não encontrado');
+          throw new Error('Usuário não encontrado!');
         case 'Invalid credentials':
-          throw new Error('Credenciais inválidas');
+          throw new Error('Credenciais inválidas!');
         case 'Too many requests':
-          throw new Error('Muitas tentativas, tente novamente mais tarde');
+          throw new Error('Muitas tentativas, tente novamente mais tarde!');
         default:
-          throw new Error('Erro ao logar usuário');
+          throw new Error('Erro ao logar usuário!');
       }
     }
   }
