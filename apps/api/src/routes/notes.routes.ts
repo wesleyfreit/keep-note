@@ -14,7 +14,7 @@ export const notesRoutes = async (app: FastifyInstance) => {
     const userRequest = request.user;
 
     const notes = await prisma.note.findMany({
-      where: { id: userRequest.sub },
+      where: { userId: userRequest.sub },
       orderBy: { updatedAt: 'desc' },
     });
 
@@ -23,8 +23,9 @@ export const notesRoutes = async (app: FastifyInstance) => {
 
   app.get('/:id', async (request, reply) => {
     const { id } = paramsSchema.parse(request.params);
+    const userRequest = request.user;
 
-    const note = await prisma.note.findUnique({ where: { id } });
+    const note = await prisma.note.findUnique({ where: { id, userId: userRequest.sub } });
 
     if (!note) {
       return reply.status(404).send();
@@ -35,9 +36,10 @@ export const notesRoutes = async (app: FastifyInstance) => {
 
   app.post('/', async (request, reply) => {
     const { content, title } = noteBodySchema.parse(request.body);
+    const userRequest = request.user;
 
     const note = await prisma.note.create({
-      data: { title: title ?? '', content: content ?? '' },
+      data: { title: title ?? '', content: content ?? '', userId: userRequest.sub },
     });
 
     return reply.status(201).send({ note });
@@ -46,10 +48,11 @@ export const notesRoutes = async (app: FastifyInstance) => {
   app.put('/:id', async (request, reply) => {
     const modified = noteBodySchema.parse(request.body);
     const { id } = paramsSchema.parse(request.params);
+    const userRequest = request.user;
 
     const note = await prisma.note.update({
       data: { ...modified },
-      where: { id },
+      where: { id, userId: userRequest.sub },
     });
 
     return reply.status(200).send({ updatedAt: note.updatedAt });
@@ -57,9 +60,10 @@ export const notesRoutes = async (app: FastifyInstance) => {
 
   app.delete('/:id', async (request, reply) => {
     const { id } = paramsSchema.parse(request.params);
+    const userRequest = request.user;
 
     await prisma.note.delete({
-      where: { id },
+      where: { id, userId: userRequest.sub },
     });
 
     return reply.status(204).send();
