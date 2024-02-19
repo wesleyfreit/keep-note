@@ -15,7 +15,7 @@ export const ListNotes = ({ filteredNotes, search }: ListNotesProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (filteredNotes[filteredNotes.length - 1]) {
+    if (filteredNotes[filteredNotes.length - 1] || filteredNotes.length === 0) {
       setLoading(false);
     }
   }, [filteredNotes]);
@@ -29,7 +29,7 @@ export const ListNotes = ({ filteredNotes, search }: ListNotesProps) => {
       )}
 
       {filteredNotes.length <= 0 && !loading && (
-        <EmptyNotes searchResult={search != '' ? true : false} />
+        <EmptyNotes searchResult={search !== '' ? true : false} />
       )}
 
       <ResponsiveMasonry

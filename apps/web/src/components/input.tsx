@@ -31,11 +31,12 @@ export const Input = <T extends FormTypes>({
       <input
         {...register(name)}
         name={name}
-        autoComplete="off"
         id={name}
         placeholder={placeholder}
         type={type}
-        className="rounded-md bg-slate-800 p-2 outline-none transition-all focus-visible:ring-2 focus-visible:ring-blue-500"
+        autoComplete={name === 'password' ? 'current-password' : 'on'}
+        data-error={errors[name]?.message ? true : false}
+        className="rounded-md bg-slate-800 p-2 outline-none transition-all focus-visible:ring-2 focus-visible:ring-blue-500 data-[error=true]:ring-2 data-[error=true]:ring-red-500"
       />
 
       <span className="text-sm font-medium text-red-500">
