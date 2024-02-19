@@ -4,6 +4,7 @@ export type INote = {
   content: string;
   createdAt: Date;
   updatedAt: Date;
+  userId: string;
 };
 
 export type INoteUpdated = {
