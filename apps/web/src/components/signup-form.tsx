@@ -5,8 +5,10 @@ import { ISignUp, signUpSchema } from '@/validation/signup-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { Button } from './button';
 
 export const SignUpForm = () => {
   const {
@@ -17,9 +19,13 @@ export const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const handleSignUp = async (data: ISignUp) => {
+    setIsLoading(true);
+
     const name = data.name;
     const email = data.email;
     const password = data.password;
@@ -34,9 +40,10 @@ export const SignUpForm = () => {
       router.push('/login');
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error.stack);
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,12 +101,7 @@ export const SignUpForm = () => {
         type="password"
       />
 
-      <button
-        className="rounded-full bg-blue-800 py-3 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500"
-        type="submit"
-      >
-        Começar
-      </button>
+      <Button title="Começar" isLoading={isLoading} />
     </form>
   );
 };

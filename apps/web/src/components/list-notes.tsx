@@ -24,7 +24,7 @@ export const ListNotes = ({ filteredNotes, search }: ListNotesProps) => {
     <>
       {loading && (
         <div className="flex justify-center">
-          <Spinner />
+          <Spinner size="size-8" />
         </div>
       )}
 

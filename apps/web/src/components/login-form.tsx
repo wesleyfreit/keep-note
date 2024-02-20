@@ -1,13 +1,16 @@
 'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
 import { signIn } from '@/actions/users';
 import { Input } from '@/components/input';
 import { useAuth } from '@/hooks/use-auth';
 import { ISignIn, signInSchema } from '@/validation/signin-schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { Button } from './button';
 
 export const LoginForm = () => {
   const {
@@ -18,11 +21,15 @@ export const LoginForm = () => {
     resolver: zodResolver(signInSchema),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const { setUser } = useAuth();
 
   const handleSignIn = async (data: ISignIn) => {
+    setIsLoading(true);
+
     const email = data.email;
     const password = data.password;
 
@@ -31,15 +38,14 @@ export const LoginForm = () => {
 
       if (authenticatedUser) {
         setUser(authenticatedUser);
+        toast.info('Você entrou na sua conta!');
       }
-
-      toast.info('Você entrou na sua conta!');
-      router.refresh();
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error.stack);
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,12 +87,7 @@ export const LoginForm = () => {
         type="password"
       />
 
-      <button
-        className="rounded-full bg-blue-800 py-3 text-sm font-medium text-slate-300 outline-none transition-colors hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500"
-        type="submit"
-      >
-        Entrar
-      </button>
+      <Button title="Entrar" isLoading={isLoading} />
     </form>
   );
 };
