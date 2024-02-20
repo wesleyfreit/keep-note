@@ -11,7 +11,6 @@ export const signUp = async (name: string, email: string, password: string) => {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data.error;
 
-      console.log(errorMessage);
       switch (errorMessage) {
         case 'User already exists':
           throw new Error('Este email já está cadastrado.');
@@ -32,7 +31,6 @@ export const signIn = async (email: string, password: string) => {
     });
 
     const token = response.data.token;
-
     await setAuthToken(token);
 
     return response.data.user;

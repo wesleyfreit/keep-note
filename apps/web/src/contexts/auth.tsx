@@ -9,7 +9,7 @@ export interface AuthContextProps {
   user: IUser | undefined;
   setUser: (user: IUser) => void;
   isLoadingUserData: boolean;
-  removeUserAndToken: () => void;
+  removeUserAndToken: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -26,10 +26,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const removeUserAndToken = useCallback(async () => {
     await deleteAuthToken();
-    router.push('/login');
-
     setUser({} as IUser);
-  }, [router]);
+  }, []);
 
   const loadUserData = useCallback(async () => {
     try {
@@ -57,6 +55,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     loadUserData();
   }, [loadUserData]);
+
+  useEffect(() => {
+    if (user.id) {
+      router.push('/');
+    } else {
+      router.push('/login');
+    }
+  }, [user, router]);
 
   return (
     <AuthContext.Provider
