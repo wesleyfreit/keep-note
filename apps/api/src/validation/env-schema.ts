@@ -5,10 +5,6 @@ export const envSchema = z.object({
   ORIGIN_URL: z.string(),
   JWT_SECRET: z.string(),
   PORT: z.coerce.number().default(3333),
-  FIREBASE_APIKEY: z.string(),
-  FIREBASE_AUTHDOMAIN: z.string(),
-  FIREBASE_PROJECTID: z.string(),
-  FIREBASE_STORAGEBUCKET: z.string(),
-  FIREBASE_MESSAGINGSENDERID: z.string(),
-  FIREBASE_APPID: z.string(),
+  SENDER_USER: z.string(),
+  SENDER_PASS: z.string(),
 });

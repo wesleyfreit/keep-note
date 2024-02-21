@@ -1,21 +1,13 @@
 import { FastifyInstance } from 'fastify';
-import { FirebaseError } from 'firebase/app';
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
-
 import { emailValidator } from '@/lib/email-validator';
 import { prisma } from '@/lib/prisma-client';
 import { userAuth } from '@/middlewares/user-auth';
 import { userValidation } from '@/middlewares/user-validation';
-import { auth } from '@/services/firebase-auth';
 import { createUserBodySchema, loginUserBodySchema } from '@/validation/users-schema';
 
 export const usersRoutes = async (app: FastifyInstance) => {
   app.post('/signup', async (request, reply) => {
-    const { name, email, password } = createUserBodySchema.parse(request.body);
+    const { name, email } = createUserBodySchema.parse(request.body);
 
     const userByEmail = await prisma.user.findFirst({
       where: { email: { equals: email, mode: 'insensitive' } },
@@ -31,51 +23,24 @@ export const usersRoutes = async (app: FastifyInstance) => {
       return reply.status(400).send({ error: 'Invalid email' });
     }
 
-    const [{ user }, { id }] = await Promise.all([
-      createUserWithEmailAndPassword(auth, email, password),
-      prisma.user.create({ data: { name, email } }),
-    ]);
+    const user = await prisma.user.create({ data: { name, email } });
 
-    if (user.email && id) {
-      await sendEmailVerification(user);
-
-      return reply.status(201).send({ info: 'Email verification sent' });
-    }
+    return reply.status(201).send(user);
   });
 
   app.post('/signin', async (request, reply) => {
-    const { email, password } = loginUserBodySchema.parse(request.body);
+    const { email } = loginUserBodySchema.parse(request.body);
 
-    try {
-      const userByEmail = await prisma.user.findFirst({
-        where: { email: { equals: email, mode: 'insensitive' } },
-      });
+    const userByEmail = await prisma.user.findFirst({
+      where: { email: { equals: email, mode: 'insensitive' } },
+    });
 
-      if (userByEmail) {
-        const { user } = await signInWithEmailAndPassword(auth, email, password);
+    if (userByEmail) {
+      const token = app.jwt.sign({}, { expiresIn: '1h', sub: userByEmail.id });
 
-        if (!user.emailVerified) {
-          await sendEmailVerification(user);
-
-          return reply.status(401).send({ error: 'Email is not verified' });
-        }
-
-        const token = app.jwt.sign({}, { expiresIn: '1h', sub: userByEmail.id });
-
-        return reply.send({ user: userByEmail, token });
-      }
-      return reply.status(404).send({ error: 'User does not exist' });
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        const errorCode = error.code;
-
-        if (errorCode === 'auth/invalid-credential')
-          return reply.status(401).send({ error: 'Invalid credentials' });
-
-        if (errorCode === 'auth/too-many-requests')
-          return reply.status(429).send({ error: 'Too many requests' });
-      }
+      return reply.send({ user: userByEmail, token });
     }
+    return reply.status(404).send({ error: 'User does not exist' });
   });
 
   app.get('/user', { preHandler: [userAuth, userValidation] }, async (request, reply) => {
