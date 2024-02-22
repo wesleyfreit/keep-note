@@ -1,6 +1,6 @@
 'use server';
 
-import { api } from '@/services/api';
+import { api } from '@/lib/api';
 import { cookies } from 'next/headers';
 
 export const hasAuthToken = async () => {

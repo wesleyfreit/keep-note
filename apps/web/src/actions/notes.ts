@@ -2,7 +2,7 @@
 
 import { INote, INoteUpdated } from '@/dtos/note';
 import { AxiosError } from 'axios';
-import { api } from '../services/api';
+import { api } from '../lib/api';
 
 export const getAllNotes = async () => {
   try {

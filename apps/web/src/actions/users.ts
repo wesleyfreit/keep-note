@@ -1,7 +1,7 @@
 'use server';
 import { IUser } from '@/dtos/user';
 import { AxiosError } from 'axios';
-import { api } from '../services/api';
+import { api } from '../lib/api';
 import { setAuthToken } from './auth';
 
 export const signUp = async (name: string, email: string, password: string) => {
@@ -46,12 +46,42 @@ export const signIn = async (email: string, password: string) => {
           throw new Error('Usuário não encontrado!');
         case 'Invalid credentials':
           throw new Error('Credenciais inválidas!');
-        case 'Too many requests':
-          throw new Error('Muitas tentativas, tente novamente mais tarde!');
         default:
           throw new Error('Erro ao logar usuário!');
       }
     }
+  }
+};
+
+export const verifyEmail = async (code: string) => {
+  try {
+    await api.post(
+      '/verify-email',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${code}`,
+        },
+      },
+    );
+
+    return { message: 'Email verificado com sucesso!', code: 200 };
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data.error;
+
+      switch (errorMessage) {
+        case 'Email already verified':
+          return { message: 'Email já verificado!', code: 400 };
+        case 'Unauthorized':
+          return { message: 'Código de verificação inválido ou expirado!', code: 401 };
+        case 'User does not exist':
+          return { message: 'Conta não encontrada!', code: 404 };
+        default:
+          return { message: 'Erro ao verificar email!', code: 500 };
+      }
+    }
+    return { message: 'Erro ao verificar email!', code: 500 };
   }
 };
 
