@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from './button';
 
-export const SignUpForm = () => {
+export const RegisterForm = () => {
   const {
     register,
     handleSubmit,
@@ -37,6 +37,7 @@ export const SignUpForm = () => {
         'Você criou sua conta! Um link de confirmação foi enviado para o seu email.',
       );
 
+      router.refresh();
       router.push('/login');
     } catch (error) {
       if (error instanceof Error) {

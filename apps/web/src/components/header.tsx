@@ -42,6 +42,8 @@ export const Header = () => {
   const handleSignOut = async () => {
     await removeUserAndToken();
     toast.info('Você saiu da sua conta!');
+
+    router.prefetch('/login');
   };
 
   return (
@@ -56,7 +58,7 @@ export const Header = () => {
 
       <form onSubmit={handleSubmit} className="relative w-96">
         <input
-          type="text"
+          type="search"
           name="search"
           autoComplete="off"
           title="Digite para pesquisar em suas notas"

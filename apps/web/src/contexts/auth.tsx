@@ -2,7 +2,6 @@
 import { deleteAuthToken, hasAuthToken } from '@/actions/auth';
 import { getUser } from '@/actions/users';
 import { IUser } from '@/dtos/user';
-import { useRouter } from 'next/navigation';
 import { ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 
 export interface AuthContextProps {
@@ -21,8 +20,6 @@ export const AuthContext = createContext<AuthContextProps>({} as AuthContextProp
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUser>({} as IUser);
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
-
-  const router = useRouter();
 
   const removeUserAndToken = useCallback(async () => {
     await deleteAuthToken();
@@ -55,14 +52,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     loadUserData();
   }, [loadUserData]);
-
-  useEffect(() => {
-    if (user.id) {
-      router.push('/');
-    } else {
-      router.push('/login');
-    }
-  }, [user, router]);
 
   return (
     <AuthContext.Provider

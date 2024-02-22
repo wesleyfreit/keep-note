@@ -1,10 +1,10 @@
 import { hasAuthToken } from '@/actions/auth';
-import { SignUpForm } from '@/components/signup-form';
+import { RegisterForm } from '@/components/register-form';
 import { WelcomeSection } from '@/components/welcome-section';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
-export default async function Signup() {
+export default async function Register() {
   const authToken = await hasAuthToken();
 
   if (authToken) {
@@ -21,7 +21,7 @@ export default async function Signup() {
           <h1 className="text-3xl font-bold">KeepNote</h1>
         </div>
 
-        <SignUpForm />
+        <RegisterForm />
       </div>
     </div>
   );

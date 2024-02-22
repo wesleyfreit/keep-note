@@ -39,6 +39,8 @@ export const LoginForm = () => {
       if (authenticatedUser) {
         setUser(authenticatedUser);
         toast.info('Você entrou na sua conta!');
+
+        router.prefetch('/');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -60,7 +62,7 @@ export const LoginForm = () => {
         <span>
           Não têm uma conta?{' '}
           <Link
-            href="/signup"
+            href="/register"
             onClick={() => router.push('/signup')}
             className="font-bold text-blue-500 underline hover:text-blue-600"
           >
