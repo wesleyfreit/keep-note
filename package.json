@@ -9,9 +9,11 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "turbo dev",
+    "build:api": "turbo build --scope=api --include-dependencies --no-deps",
+    "build:web": "turbo build --scope=web --include-dependencies --no-deps",
     "build": "turbo build",
     "start": "turbo start",
+    "dev": "turbo dev",
     "clean": "turbo clean",
     "lint": "turbo lint",
     "lint-staged": "lint-staged",
