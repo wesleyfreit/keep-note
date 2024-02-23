@@ -1,43 +1,20 @@
 {
   "$schema": "http://json.schemastore.org/eslintrc",
   "env": {
-    "browser": true,
-    "node": true
+    "browser": true
   },
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
+    "@repo/eslint-config/library.json",
     "plugin:tailwindcss/recommended",
-    "plugin:prettier/recommended",
     "plugin:react/recommended",
-    "next/core-web-vitals",
-    "eslint-config-turbo"
+    "next"
   ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
-  "plugins": ["@typescript-eslint"],
-  "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "configFile": "../../.prettierrc"
-      }
-    ],
-    "@next/next/no-html-link-for-pages": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    },
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx", ".d.ts"]
     }
   },
-  "ignorePatterns": ["*.config.*", "node_modules/"]
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off"
+  }
 }
