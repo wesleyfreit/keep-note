@@ -1,9 +1,10 @@
-import { prisma } from '@/lib/prisma-client';
-import { userAuth } from '@/middlewares/user-auth';
-import { userValidation } from '@/middlewares/user-validation';
-import { noteBodySchema } from '@/validation/notes-schema';
-import { paramsSchema } from '@/validation/params-schema';
 import { FastifyInstance } from 'fastify';
+
+import { prisma } from '../lib/prisma-client';
+import { userAuth } from '../middlewares/user-auth';
+import { userValidation } from '../middlewares/user-validation';
+import { noteBodySchema } from '../validation/notes-schema';
+import { paramsSchema } from '../validation/params-schema';
 
 export const notesRoutes = async (app: FastifyInstance) => {
   app.addHook('preHandler', userAuth);

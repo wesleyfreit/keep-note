@@ -1,5 +1,5 @@
-import { env } from '@/env';
 import nodemailer from 'nodemailer';
+import { env } from '../env';
 
 const transporter = nodemailer.createTransport({
   host: env.SENDER_HOST,
@@ -10,15 +10,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmailVerification = async (
-  name: string,
-  email: string,
-  token: string,
-) => {
+export const sendValidationEmail = async (name: string, email: string, token: string) => {
   await transporter.sendMail({
     from: env.SENDER_FROM,
     to: email,
-    subject: 'Verifque o seu email cadastrado em Keep Note',
+    subject: 'Verifique o seu email cadastrado em Keep Note',
     html: `
     <!DOCTYPE html>
     <html lang="pt-BR">

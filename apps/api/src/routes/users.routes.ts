@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt';
 import { FastifyInstance } from 'fastify';
 
-import { emailValidator } from '@/lib/email-validator';
-import { sendEmailVerification } from '@/lib/nodemailer-sender';
-import { prisma } from '@/lib/prisma-client';
-import { userAuth } from '@/middlewares/user-auth';
-import { userValidation } from '@/middlewares/user-validation';
-import { createUserBodySchema, loginUserBodySchema } from '@/validation/users-schema';
+import { emailValidator } from '../lib/email-validator';
+import { sendValidationEmail } from '../lib/nodemailer-sender';
+import { prisma } from '../lib/prisma-client';
+import { userAuth } from '../middlewares/user-auth';
+import { userValidation } from '../middlewares/user-validation';
+import { createUserBodySchema, loginUserBodySchema } from '../validation/users-schema';
 
 export const usersRoutes = async (app: FastifyInstance) => {
   app.post('/signup', async (request, reply) => {
@@ -35,7 +35,7 @@ export const usersRoutes = async (app: FastifyInstance) => {
 
       const firstName = userCreated.name.split(' ')[0] ?? userCreated.name;
 
-      await sendEmailVerification(firstName, userCreated.email, token);
+      await sendValidationEmail(firstName, userCreated.email, token);
 
       return reply.status(201).send({ info: 'Email verification sent' });
     }
@@ -52,7 +52,7 @@ export const usersRoutes = async (app: FastifyInstance) => {
       if (!userByEmail.emailVerified) {
         const firstName = userByEmail.name.split(' ')[0] ?? userByEmail.name;
 
-        await sendEmailVerification(firstName, userByEmail.email, userByEmail.id);
+        await sendValidationEmail(firstName, userByEmail.email, userByEmail.id);
 
         return reply.status(401).send({ error: 'Email verification resent' });
       }
