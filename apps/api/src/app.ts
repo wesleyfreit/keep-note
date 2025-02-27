@@ -23,6 +23,14 @@ if (env.NODE_ENV !== 'production') {
   });
 }
 
+app.get('/', async (req, res) =>
+  res.status(200).send({
+    info: 'Welcome to the KEEP NOTE API',
+    version: '1.0.0',
+    input: req.headers,
+  }),
+);
+
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
     return reply.status(400).send({ error: 'Validation error.', issues: error.format() });
