@@ -1,5 +1,6 @@
 {
-  "$schema": "http://json.schemastore.org/eslintrc",
+  "$schema": "https://json.schemastore.org/eslintrc",
+  "root": true,
   "env": {
     "es2021": true,
     "node": true
@@ -7,8 +8,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "turbo"
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,10 +17,12 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "@typescript-eslint/no-empty-object-type": "off",
+    "@typescript-eslint/consistent-type-imports": "error",
     "prettier/prettier": [
-      "error",
+      "warn",
       {
-        "configFile": "../../.prettierrc"
+        "configFile": ".prettierrc"
       }
     ]
   },
@@ -29,5 +31,5 @@
       "@typescript-eslint/parser": [".ts", ".tsx", ".d.ts"]
     }
   },
-  "ignorePatterns": ["*.config.*", "node_modules/", "build/"]
+  "ignorePatterns": ["node_modules/", "build/", "dist/", ".next/", "*.json"]
 }

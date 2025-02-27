@@ -1,7 +1,0 @@
-{
-  "extends": ["@repo/eslint-config/library.json"],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": true
-  }
-}
