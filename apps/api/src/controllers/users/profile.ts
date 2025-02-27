@@ -11,6 +11,14 @@ export const profile = async (request: FastifyRequest, reply: FastifyReply) => {
   if (userById) {
     const token = await reply.jwtSign({}, { expiresIn: '1h', sub: userById.id });
 
-    return reply.send({ user: userById, token });
+    return reply.send({
+      user: {
+        id: userById.id,
+        name: userById.name,
+        email: userById.email,
+        createdAt: userById.createdAt,
+      },
+      token,
+    });
   }
 };

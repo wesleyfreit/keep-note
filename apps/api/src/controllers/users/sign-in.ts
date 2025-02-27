@@ -32,7 +32,15 @@ export const signIn = async (request: FastifyRequest, reply: FastifyReply) => {
     if (checkPassword) {
       const token = await reply.jwtSign({}, { expiresIn: '1h', sub: userByEmail.id });
 
-      return reply.send({ user: userByEmail, token });
+      return reply.send({
+        user: {
+          id: userByEmail.id,
+          name: userByEmail.name,
+          email: userByEmail.email,
+          createdAt: userByEmail.createdAt,
+        },
+        token,
+      });
     }
     return reply.status(401).send({ error: 'Invalid credentials' });
   }
