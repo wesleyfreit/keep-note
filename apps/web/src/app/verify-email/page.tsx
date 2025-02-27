@@ -4,17 +4,17 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 interface VerifyEmailProps {
-  searchParams?: { code: string };
+  searchParams: Promise<{ code: string }>;
 }
 
-export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
+export default async function VerifyEmail(props: VerifyEmailProps) {
   const authToken = await hasAuthToken();
 
   if (authToken) {
     redirect('/');
   }
 
-  const code = searchParams?.code || '';
+  const { code } = await props.searchParams;
 
   if (!code) {
     redirect('/login');

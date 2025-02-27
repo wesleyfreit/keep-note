@@ -1,7 +1,8 @@
 'use server';
-import { getAuthToken } from '@/actions/auth';
+
+import { deleteAuthToken, getAuthToken } from '@/actions/auth';
 import { env } from '@/env';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const api = axios.create({
   baseURL: env.API_URL,
@@ -16,5 +17,23 @@ api.interceptors.request.use(async (config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  async (response) => {
+    return response;
+  },
+  async (error) => {
+    if (error instanceof AxiosError) {
+      const message = error.response?.data.error;
+
+      if (['Unauthorized'].includes(message)) {
+        api.defaults.headers.Authorization = '';
+        await deleteAuthToken();
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export { api };

@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { ListNotes } from './list-notes';
 
 interface HomeProps {
-  searchParams: Promise<{ search?: string; page: string }>;
+  searchParams: Promise<{ search?: string }>;
 }
 
 export default async function Home(props: HomeProps) {

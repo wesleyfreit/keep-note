@@ -6,12 +6,12 @@
     "node": ">=18"
   },
   "scripts": {
-    "build:api": "turbo build --filter=@seinfra/api",
-    "build:web": "turbo build --filter=@seinfra/web",
-    "dev:api": "turbo dev --filter=@seinfra/api",
-    "dev:web": "turbo dev --filter=@seinfra/web",
-    "start:api": "turbo start --filter=@seinfra/api",
-    "start:web": "turbo start --filter=@seinfra/web",
+    "build:api": "turbo build --filter=@keep-note/api",
+    "build:web": "turbo build --filter=@keep-note/web",
+    "dev:api": "turbo dev --filter=@keep-note/api",
+    "dev:web": "turbo dev --filter=@keep-note/web",
+    "start:api": "turbo start --filter=@keep-note/api",
+    "start:web": "turbo start --filter=@keep-note/web",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:deploy": "turbo db:deploy",
