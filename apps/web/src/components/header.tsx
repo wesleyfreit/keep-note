@@ -1,4 +1,5 @@
 'use client';
+
 import { useAuth } from '@/hooks/use-auth';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { LogOut, SearchIcon, User } from 'lucide-react';

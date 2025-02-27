@@ -1,4 +1,5 @@
 'use client';
+
 import { revalidate } from '@/actions/app';
 import type { INote } from '@/dtos/note';
 import * as Dialog from '@radix-ui/react-dialog';

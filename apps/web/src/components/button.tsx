@@ -1,7 +1,9 @@
 'use client';
+
+import type { ComponentProps } from 'react';
 import { Spinner } from './spinner';
 
-interface ButtonProps {
+interface ButtonProps extends ComponentProps<'button'> {
   title: string;
   isLoading: boolean;
 }

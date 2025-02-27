@@ -1,4 +1,8 @@
-import { envSchema } from '@/validation/env-schema';
+import z from 'zod';
+
+export const envSchema = z.object({
+  API_URL: z.string(),
+});
 
 const _env = envSchema.safeParse(process.env);
 

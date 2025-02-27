@@ -1,4 +1,5 @@
 'use client';
+
 import { revalidate } from '@/actions/app';
 import { deleteNote, getNote, modifyNote } from '@/actions/notes';
 import type { INote } from '@/dtos/note';
