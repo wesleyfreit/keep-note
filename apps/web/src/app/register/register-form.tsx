@@ -1,15 +1,30 @@
 'use client';
 import { signUp } from '@/actions/users';
 import { Input } from '@/components/input';
-import type { ISignUp } from '@/validation/signup-schema';
-import { signUpSchema } from '@/validation/signup-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Button } from './button';
+import { z } from 'zod';
+import { Button } from '../../components/button';
+
+export const signUpSchema = z
+  .object({
+    name: z.string({ required_error: 'Campo vazio' }).min(3, 'Nome inválido'),
+    email: z.string({ required_error: 'Campo vazio' }).email('E-mail inválido'),
+    password: z
+      .string({ required_error: 'Campo vazio' })
+      .min(6, 'A senha deve ter pelo menos 6 dígitos'),
+    confirm_password: z.string({ required_error: 'Campo vazio' }),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: 'As senhas não são iguais',
+    path: ['confirm_password'],
+  });
+
+export type ISignUp = z.infer<typeof signUpSchema>;
 
 export const RegisterForm = () => {
   const {
@@ -69,16 +84,20 @@ export const RegisterForm = () => {
       </div>
 
       <Input
-        register={register}
-        errors={errors}
+        {...register('name')}
+        htmlFor="name"
+        data-error={errors?.name?.message ? true : false}
+        error={errors?.name?.message}
         name="name"
         label="Nome"
         placeholder="Insira seu nome"
       />
 
       <Input
-        register={register}
-        errors={errors}
+        {...register('email')}
+        htmlFor="email"
+        data-error={errors?.email?.message ? true : false}
+        error={errors?.email?.message}
         name="email"
         label="Email"
         placeholder="Insira um email"
@@ -86,8 +105,10 @@ export const RegisterForm = () => {
       />
 
       <Input
-        register={register}
-        errors={errors}
+        {...register('password')}
+        htmlFor="password"
+        data-error={errors?.password?.message ? true : false}
+        error={errors?.password?.message}
         name="password"
         label="Senha"
         placeholder="Insira uma senha"
@@ -95,8 +116,10 @@ export const RegisterForm = () => {
       />
 
       <Input
-        register={register}
-        errors={errors}
+        {...register('confirm_password')}
+        htmlFor="confirm_password"
+        data-error={errors?.confirm_password?.message ? true : false}
+        error={errors?.confirm_password?.message}
         name="confirm_password"
         label="Confirmar senha"
         placeholder="Confirme a senha inserida"

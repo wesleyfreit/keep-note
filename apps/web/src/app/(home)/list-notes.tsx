@@ -1,10 +1,11 @@
 'use client';
-import { NoteCard } from '@/components/note-card';
+
+import { NoteCard } from '@/app/(home)/note-card';
+import { Spinner } from '@/components/spinner';
 import type { INote } from '@/dtos/note';
 import { useEffect, useState } from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { EmptyNotes } from './empty-notes';
-import { Spinner } from './spinner';
 
 interface ListNotesProps {
   filteredNotes: INote[];

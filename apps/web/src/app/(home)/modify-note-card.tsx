@@ -1,4 +1,7 @@
 'use client';
+import { revalidate } from '@/actions/app';
+import { deleteNote, getNote, modifyNote } from '@/actions/notes';
+import type { INote } from '@/dtos/note';
 import * as Dialog from '@radix-ui/react-dialog';
 import { format, isThisYear, isToday, isYesterday } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -7,11 +10,6 @@ import type { ChangeEvent, FocusEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
-
-import { revalidate } from '@/actions/app';
-import { deleteNote, getNote, modifyNote } from '@/actions/notes';
-import type { INote } from '@/dtos/note';
-import { Separator } from './separator';
 
 let speechRecognition: SpeechRecognition | null = null;
 
@@ -198,6 +196,9 @@ export const ModifyNoteCard = ({
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 flex items-center justify-center bg-black/50 data-[state=closed]:animate-[overlay-hide_300ms] data-[state=open]:animate-[overlay-show_200ms]">
         <Dialog.Content className="relative flex size-full max-w-[640px] flex-col overflow-hidden overflow-y-auto bg-slate-700 outline-none data-[state=closed]:animate-[content-hide_200ms] data-[state=open]:animate-[content-show_200ms] md:max-h-[60vh] md:rounded-md">
+          <Dialog.Title />
+          <Dialog.Description />
+
           <div className="flex flex-1 flex-col gap-5 p-5">
             <input
               className="w-full bg-transparent font-medium tracking-wide text-slate-200 outline-none"
@@ -210,7 +211,7 @@ export const ModifyNoteCard = ({
               placeholder="Título"
             />
 
-            <Separator />
+            <div className="h-px bg-slate-600" />
 
             <textarea
               className="w-full flex-1 resize-none bg-transparent pr-1 text-sm leading-6 text-slate-200 outline-none md:p-0"

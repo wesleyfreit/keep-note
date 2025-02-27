@@ -1,46 +1,24 @@
-import type { ISignIn } from '@/validation/signin-schema';
-import type { ISignUp } from '@/validation/signup-schema';
-import type { InputHTMLAttributes } from 'react';
-import type { FieldErrors, Path, UseFormRegister } from 'react-hook-form';
+import type { ComponentProps } from 'react';
 
-type FormTypes = ISignUp | ISignIn;
-
-interface InputProps<T extends FormTypes> {
-  register: UseFormRegister<T>;
-  errors: FieldErrors<T>;
-  name: Path<T>;
+interface InputProps extends ComponentProps<'input'> {
+  htmlFor: string;
   label: string;
-  placeholder: string;
-  type?: InputHTMLAttributes<HTMLInputElement>['type'];
+  error?: string;
 }
 
-export const Input = <T extends FormTypes>({
-  register,
-  errors,
-  name,
-  label,
-  placeholder,
-  type,
-}: InputProps<T>) => {
+export const Input = ({ htmlFor, label, error, ...props }: InputProps) => {
   return (
     <div className="flex flex-col space-y-1">
-      <label htmlFor={name}>
+      <label htmlFor={htmlFor}>
         <span className="font-medium leading-relaxed">{label}</span>
       </label>
 
       <input
-        {...register(name)}
-        name={name}
-        id={name}
-        placeholder={placeholder}
-        type={type}
-        data-error={errors[name]?.message ? true : false}
         className="rounded-md bg-slate-800 p-2 outline-none transition-all focus-visible:ring-2 focus-visible:ring-blue-500 data-[error=true]:ring-2 data-[error=true]:ring-red-500"
+        {...props}
       />
 
-      <span className="text-sm font-medium text-red-500">
-        {errors[name]?.message as string}
-      </span>
+      <span className="text-sm font-medium text-red-500">{error}</span>
     </div>
   );
 };

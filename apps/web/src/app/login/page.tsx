@@ -1,5 +1,5 @@
 import { hasAuthToken } from '@/actions/auth';
-import { LoginForm } from '@/components/login-form';
+import { LoginForm } from './login-form';
 import { WelcomeSection } from '@/components/welcome-section';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';

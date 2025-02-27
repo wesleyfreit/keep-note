@@ -1,12 +1,11 @@
 'use client';
+import { revalidate } from '@/actions/app';
+import type { INote } from '@/dtos/note';
 import * as Dialog from '@radix-ui/react-dialog';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-import { revalidate } from '@/actions/app';
-import type { INote } from '@/dtos/note';
 import { ModifyNoteCard } from './modify-note-card';
 
 interface NoteCardProps {

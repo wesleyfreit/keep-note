@@ -1,4 +1,4 @@
-import { AuthProvider } from '@/contexts/auth';
+import { AuthProvider } from '@/providers/auth-provider';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
@@ -20,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <AuthProvider>
-        <body className={`${inter.className} bg-slate-900 text-slate-50 antialiased`}>
+        <body
+          className={`${inter.className} bg-slate-900 text-slate-50 antialiased`}
+          suppressHydrationWarning
+        >
           <Toaster
             richColors
             expand

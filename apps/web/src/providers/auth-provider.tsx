@@ -1,9 +1,11 @@
 'use client';
+
 import { deleteAuthToken, hasAuthToken } from '@/actions/auth';
 import { getUser } from '@/actions/users';
+import { AuthContext } from '@/contexts/auth-context';
 import type { IUser } from '@/dtos/user';
 import type { ReactNode } from 'react';
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface AuthContextProps {
   user: IUser | undefined;
@@ -15,8 +17,6 @@ export interface AuthContextProps {
 interface AuthProviderProps {
   children: ReactNode;
 }
-
-export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<IUser>({} as IUser);

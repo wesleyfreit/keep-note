@@ -1,12 +1,12 @@
 'use client';
-import * as Dialog from '@radix-ui/react-dialog';
-import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 
 import { revalidate } from '@/actions/app';
 import { saveNote } from '@/actions/notes';
 import type { INote } from '@/dtos/note';
+import * as Dialog from '@radix-ui/react-dialog';
+import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import { ModifyNoteCard } from './modify-note-card';
 
 export const NewNoteCard = () => {

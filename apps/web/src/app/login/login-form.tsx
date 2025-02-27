@@ -1,17 +1,24 @@
 'use client';
+import { signIn } from '@/actions/users';
+import { Button } from '@/components/button';
+import { Input } from '@/components/input';
+import { useAuth } from '@/hooks/use-auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
-import { signIn } from '@/actions/users';
-import { Input } from '@/components/input';
-import { useAuth } from '@/hooks/use-auth';
-import type { ISignIn } from '@/validation/signin-schema';
-import { signInSchema } from '@/validation/signin-schema';
-import { Button } from './button';
+export const signInSchema = z.object({
+  email: z.string({ required_error: 'Campo vazio' }).email('E-mail inválido'),
+  password: z
+    .string({ required_error: 'Campo vazio' })
+    .min(6, 'A senha deve ter pelo menos 6 dígitos'),
+});
+
+export type ISignIn = z.infer<typeof signInSchema>;
 
 export const LoginForm = () => {
   const {
@@ -73,20 +80,24 @@ export const LoginForm = () => {
       </div>
 
       <Input
-        register={register}
-        errors={errors}
+        {...register('email')}
+        htmlFor="email"
+        data-error={errors?.email?.message ? true : false}
+        error={errors?.email?.message}
         name="email"
         label="Email"
-        placeholder="Insira seu email"
+        placeholder="Insira um email"
         type="email"
       />
 
       <Input
-        register={register}
-        errors={errors}
+        {...register('password')}
+        htmlFor="password"
+        data-error={errors?.password?.message ? true : false}
+        error={errors?.password?.message}
         name="password"
         label="Senha"
-        placeholder="Insira sua senha"
+        placeholder="Insira uma senha"
         type="password"
       />
 
