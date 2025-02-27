@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
 import type { FastifyInstance } from 'fastify';
-
-import { emailValidator } from '../lib/email-validator';
 import { sendValidationEmail } from '../lib/nodemailer-sender';
 import { prisma } from '../lib/prisma-client';
 import { userAuth } from '../middlewares/user-auth';
@@ -18,12 +16,6 @@ export const usersRoutes = async (app: FastifyInstance) => {
 
     if (userByEmail) {
       return reply.status(409).send({ error: 'User already exists' });
-    }
-
-    const isValidEmail = await emailValidator(email);
-
-    if (!isValidEmail.valid) {
-      return reply.status(400).send({ error: 'Invalid email' });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
