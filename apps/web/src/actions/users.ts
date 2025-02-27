@@ -1,5 +1,5 @@
 'use server';
-import { IUser } from '@/dtos/user';
+import type { IUser } from '@/dtos/user';
 import { AxiosError } from 'axios';
 import { api } from '../lib/api';
 import { setAuthToken } from './auth';

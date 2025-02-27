@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { prisma } from '../lib/prisma-client';
 
 export const userValidation = async (request: FastifyRequest, reply: FastifyReply) => {

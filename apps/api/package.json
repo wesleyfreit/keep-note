@@ -32,7 +32,6 @@
     "@types/bcrypt": "5.0.2",
     "@types/node": "20.11.16",
     "@types/nodemailer": "6.4.14",
-    "eslint": "8.56.0",
     "prisma": "5.10.2",
     "tsup": "8.0.1",
     "tsx": "4.7.0",

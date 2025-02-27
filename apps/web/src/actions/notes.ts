@@ -1,6 +1,6 @@
 'use server';
 
-import { INote, INoteUpdated } from '@/dtos/note';
+import type { INote, INoteUpdated } from '@/dtos/note';
 import { AxiosError } from 'axios';
 import { api } from '../lib/api';
 
@@ -24,7 +24,7 @@ export const getNote = async (id: string) => {
   try {
     const response = await api.get<{ note: INote }>(`/notes/${id}`);
     return response.data.note;
-  } catch (error) {
+  } catch {
     throw new Error('Error fetching note');
   }
 };

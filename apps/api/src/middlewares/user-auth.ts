@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 export const userAuth = async (request: FastifyRequest, reply: FastifyReply) => {
   try {

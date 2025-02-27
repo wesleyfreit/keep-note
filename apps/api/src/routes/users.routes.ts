@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 
 import { emailValidator } from '../lib/email-validator';
 import { sendValidationEmail } from '../lib/nodemailer-sender';

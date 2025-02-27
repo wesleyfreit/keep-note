@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { revalidate } from '@/actions/app';
-import { INote } from '@/dtos/note';
+import type { INote } from '@/dtos/note';
 import { ModifyNoteCard } from './modify-note-card';
 
 interface NoteCardProps {

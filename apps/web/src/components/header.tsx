@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/use-auth';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { LogOut, SearchIcon, User } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -81,7 +81,7 @@ export const Header = () => {
         <DropdownMenu.Trigger
           title="Sua conta"
           onClick={handleSignOut}
-          className=" rounded-full border-2 border-slate-700 p-2  text-slate-300 outline-none hover:bg-slate-700 focus-visible:border-slate-500"
+          className="rounded-full border-2 border-slate-700 p-2 text-slate-300 outline-none hover:bg-slate-700 focus-visible:border-slate-500"
         >
           <User className="text-slate-300" />
         </DropdownMenu.Trigger>

@@ -1,8 +1,9 @@
 'use client';
 import { deleteAuthToken, hasAuthToken } from '@/actions/auth';
 import { getUser } from '@/actions/users';
-import { IUser } from '@/dtos/user';
-import { ReactNode, createContext, useCallback, useEffect, useState } from 'react';
+import type { IUser } from '@/dtos/user';
+import type { ReactNode } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 export interface AuthContextProps {
   user: IUser | undefined;

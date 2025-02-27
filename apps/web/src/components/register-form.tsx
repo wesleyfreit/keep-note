@@ -1,7 +1,8 @@
 'use client';
 import { signUp } from '@/actions/users';
 import { Input } from '@/components/input';
-import { ISignUp, signUpSchema } from '@/validation/signup-schema';
+import type { ISignUp } from '@/validation/signup-schema';
+import { signUpSchema } from '@/validation/signup-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

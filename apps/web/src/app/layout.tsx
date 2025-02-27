@@ -1,7 +1,7 @@
 import { AuthProvider } from '@/contexts/auth';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
 

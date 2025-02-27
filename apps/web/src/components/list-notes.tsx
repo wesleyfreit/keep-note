@@ -1,6 +1,6 @@
 'use client';
 import { NoteCard } from '@/components/note-card';
-import { INote } from '@/dtos/note';
+import type { INote } from '@/dtos/note';
 import { useEffect, useState } from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { EmptyNotes } from './empty-notes';

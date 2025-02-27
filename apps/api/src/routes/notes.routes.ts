@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 
 import { prisma } from '../lib/prisma-client';
 import { userAuth } from '../middlewares/user-auth';

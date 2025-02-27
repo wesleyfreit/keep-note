@@ -1,7 +1,7 @@
-import { ISignIn } from '@/validation/signin-schema';
-import { ISignUp } from '@/validation/signup-schema';
-import { InputHTMLAttributes } from 'react';
-import { FieldErrors, Path, UseFormRegister } from 'react-hook-form';
+import type { ISignIn } from '@/validation/signin-schema';
+import type { ISignUp } from '@/validation/signup-schema';
+import type { InputHTMLAttributes } from 'react';
+import type { FieldErrors, Path, UseFormRegister } from 'react-hook-form';
 
 type FormTypes = ISignUp | ISignIn;
 

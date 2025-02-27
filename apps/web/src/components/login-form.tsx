@@ -9,7 +9,8 @@ import { toast } from 'sonner';
 import { signIn } from '@/actions/users';
 import { Input } from '@/components/input';
 import { useAuth } from '@/hooks/use-auth';
-import { ISignIn, signInSchema } from '@/validation/signin-schema';
+import type { ISignIn } from '@/validation/signin-schema';
+import { signInSchema } from '@/validation/signin-schema';
 import { Button } from './button';
 
 export const LoginForm = () => {

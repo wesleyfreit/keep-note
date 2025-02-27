@@ -3,13 +3,14 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { format, isThisYear, isToday, isYesterday } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Mic, MicOff, Trash } from 'lucide-react';
-import { ChangeEvent, FocusEvent, useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent, FocusEvent } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { revalidate } from '@/actions/app';
 import { deleteNote, getNote, modifyNote } from '@/actions/notes';
-import { INote } from '@/dtos/note';
+import type { INote } from '@/dtos/note';
 import { Separator } from './separator';
 
 let speechRecognition: SpeechRecognition | null = null;
@@ -80,7 +81,7 @@ export const ModifyNoteCard = ({
       if (shouldRevalidate) revalidate('/');
 
       setCheckCache(false);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao salvar dados não registrados da nota!');
     }
   }, [transcription, content, note.content, note.title, title, setCheckCache, id]);
@@ -147,7 +148,7 @@ export const ModifyNoteCard = ({
       try {
         const updatedAt = await modifyNote(value, name, note.id);
         setUpdatedAt(updatedAt);
-      } catch (error) {
+      } catch {
         toast.error('Erro ao salvar nota!');
       }
     }
@@ -169,7 +170,7 @@ export const ModifyNoteCard = ({
     try {
       await deleteNote(note.id);
       toast.warning('Nota foi apagada!');
-    } catch (error) {
+    } catch {
       toast.error('Erro ao apagar nota!');
     }
   };
