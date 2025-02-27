@@ -16,6 +16,18 @@
     "start": {
       "dependsOn": ["^start"],
       "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:deploy": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
     }
   }
 }
