@@ -1,11 +1,10 @@
 'use server';
 
 import { deleteAuthToken, getAuthToken } from '@/actions/auth';
-import { env } from '@/env';
 import axios, { AxiosError } from 'axios';
 
 const api = axios.create({
-  baseURL: env.API_URL,
+  baseURL: process.env.API_URL,
 });
 
 api.interceptors.request.use(async (config) => {
