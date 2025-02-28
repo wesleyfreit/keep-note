@@ -1,4 +1,4 @@
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { sendValidationEmail } from '../../lib/nodemailer-sender';

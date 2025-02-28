@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 import { config } from 'dotenv';
 
 if (process.env.NODE_ENV === 'development') {

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { hash } from 'bcryptjs';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
 import { sendValidationEmail } from '../../lib/nodemailer-sender';
@@ -23,7 +23,7 @@ export const signUp = async (request: FastifyRequest, reply: FastifyReply) => {
     return reply.status(409).send({ error: 'User already exists' });
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
+  const passwordHash = await hash(password, 10);
 
   const userCreated = await prisma.user.create({ data: { name, email, passwordHash } });
 
