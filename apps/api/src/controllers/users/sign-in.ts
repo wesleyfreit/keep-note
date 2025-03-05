@@ -30,7 +30,7 @@ export const signIn = async (request: FastifyRequest, reply: FastifyReply) => {
     const checkPassword = await compare(password, userByEmail.passwordHash);
 
     if (checkPassword) {
-      const token = await reply.jwtSign({}, { expiresIn: '3s', sub: userByEmail.id });
+      const token = await reply.jwtSign({}, { expiresIn: '1h', sub: userByEmail.id });
 
       return reply.send({
         user: {
