@@ -1,5 +1,4 @@
 import { hasAuthToken } from '@/actions/auth';
-import { getAllNotes } from '@/actions/notes';
 import { NewNoteCard } from '@/app/(home)/new-note-card';
 import { Header } from '@/components/header';
 import { redirect } from 'next/navigation';
@@ -16,21 +15,7 @@ export default async function Home(props: HomeProps) {
     redirect('/login');
   }
 
-  const notes = await getAllNotes();
-
-  if (!notes) {
-    redirect('/login');
-  }
-
   const { search } = await props.searchParams;
-
-  const filteredNotes = search
-    ? notes.filter(
-        (note) =>
-          note.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
-          note.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-      )
-    : notes;
 
   return (
     <>
@@ -43,7 +28,7 @@ export default async function Home(props: HomeProps) {
 
         <div className="h-px bg-slate-600" />
 
-        <ListNotes filteredNotes={filteredNotes} search={search || ''} />
+        <ListNotes search={search || ''} />
       </main>
     </>
   );

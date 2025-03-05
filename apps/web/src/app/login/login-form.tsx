@@ -3,6 +3,7 @@ import { signIn } from '@/actions/users';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { useAuth } from '@/hooks/use-auth';
+import { ApiError } from '@/lib/api-error';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -24,6 +25,7 @@ export const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<ISignIn>({
     resolver: zodResolver(signInSchema),
@@ -51,8 +53,16 @@ export const LoginForm = () => {
         router.prefetch('/');
       }
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
+      if (error instanceof ApiError) {
+        const { message, paths } = error;
+
+        if (Array.isArray(paths)) {
+          paths.forEach((path) => {
+            setError(path as keyof ISignIn, { message });
+          });
+        } else {
+          toast.error(message);
+        }
       }
     } finally {
       setIsLoading(false);

@@ -30,7 +30,7 @@ export const signIn = async (request: FastifyRequest, reply: FastifyReply) => {
     const checkPassword = await compare(password, userByEmail.passwordHash);
 
     if (checkPassword) {
-      const token = await reply.jwtSign({}, { expiresIn: '1h', sub: userByEmail.id });
+      const token = await reply.jwtSign({}, { expiresIn: '3s', sub: userByEmail.id });
 
       return reply.send({
         user: {
@@ -44,5 +44,5 @@ export const signIn = async (request: FastifyRequest, reply: FastifyReply) => {
     }
     return reply.status(401).send({ error: 'Invalid credentials' });
   }
-  return reply.status(404).send({ error: 'User does not exist' });
+  return reply.status(401).send({ error: 'Invalid credentials' });
 };

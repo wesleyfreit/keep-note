@@ -1,6 +1,5 @@
 'use server';
 
-import { api } from '@/lib/api';
 import { cookies } from 'next/headers';
 
 export const hasAuthToken = async () => {
@@ -21,5 +20,4 @@ export const setAuthToken = async (token: string) => {
 
 export const deleteAuthToken = async () => {
   (await cookies()).delete('keep_note.auth');
-  api.defaults.headers.Authorization = '';
 };

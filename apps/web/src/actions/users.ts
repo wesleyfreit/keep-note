@@ -1,5 +1,5 @@
-'use server';
 import type { IUser } from '@/dtos/user';
+import { ApiError } from '@/lib/api-error';
 import { AxiosError } from 'axios';
 import { api } from '../lib/api';
 import { setAuthToken } from './auth';
@@ -13,11 +13,11 @@ export const signUp = async (name: string, email: string, password: string) => {
 
       switch (errorMessage) {
         case 'User already exists':
-          throw new Error('Este email já está cadastrado.');
+          throw new ApiError('Este email já está cadastrado.', ['email']);
         case 'Invalid email':
-          throw new Error('O email inserido é inválido!');
+          throw new ApiError('O email inserido é inválido!', ['email']);
         default:
-          throw new Error('Erro ao criar a conta!');
+          throw new ApiError('Erro ao criar a conta, tente novamente!', ['email']);
       }
     }
   }
@@ -37,17 +37,16 @@ export const signIn = async (email: string, password: string) => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data.error;
+
       switch (errorMessage) {
-        case 'Email is not verified':
-          throw new Error(
+        case 'Email verification resent':
+          throw new ApiError(
             'Email não verificado, um novo link de confirmação foi enviado.',
           );
-        case 'User does not exist':
-          throw new Error('Usuário não encontrado!');
         case 'Invalid credentials':
-          throw new Error('Credenciais inválidas!');
+          throw new ApiError('Credenciais Inválidas.', ['email', 'password']);
         default:
-          throw new Error('Erro ao logar usuário!');
+          throw new ApiError('Erro ao logar usuário, tente novamente!');
       }
     }
   }
@@ -98,9 +97,9 @@ export const getUser = async () => {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data.error;
       if (errorMessage === 'Unauthorized') {
-        return undefined;
+        throw new ApiError('Usuário não autorizado!');
       } else {
-        throw new Error('Error loging user');
+        throw new ApiError('Erro ao buscar usuário!');
       }
     }
   }

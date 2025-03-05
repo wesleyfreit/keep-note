@@ -1,22 +1,24 @@
-'use server';
-
 import type { INote, INoteUpdated } from '@/dtos/note';
+import { ApiError } from '@/lib/api-error';
 import { AxiosError } from 'axios';
 import { api } from '../lib/api';
 
 export const getAllNotes = async () => {
   try {
     const response = await api.get<{ notes: INote[] }>('/notes');
-    return response.data.notes;
+
+    return {
+      ...response.data,
+    };
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data.error;
+
       if (errorMessage === 'Unauthorized') {
-        return undefined;
-      } else {
-        throw new Error('Error fetching notes');
+        throw new ApiError('Você não está autenticado');
       }
     }
+    throw new ApiError('Erro ao buscar notas');
   }
 };
 
@@ -24,8 +26,15 @@ export const getNote = async (id: string) => {
   try {
     const response = await api.get<{ note: INote }>(`/notes/${id}`);
     return response.data.note;
-  } catch {
-    throw new Error('Error fetching note');
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data.error;
+
+      if (errorMessage === 'Unauthorized') {
+        throw new ApiError('Você não está autenticado');
+      }
+    }
+    throw new ApiError('Erro ao buscar a nota');
   }
 };
 
@@ -39,9 +48,13 @@ export const saveNote = async (value: string, name: string) => {
     return response.data.note;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
+      const errorMessage = error.response?.data.error;
+
+      if (errorMessage === 'Unauthorized') {
+        throw new ApiError('Você não está autenticado');
+      }
     }
-    throw new Error('Error saving note');
+    throw new ApiError('Erro ao salva a nota');
   }
 };
 
@@ -56,9 +69,13 @@ export const modifyNote = async (value: string, name: string, id: string) => {
     return updatedAt;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
+      const errorMessage = error.response?.data.error;
+
+      if (errorMessage === 'Unauthorized') {
+        throw new ApiError('Você não está autenticado');
+      }
     }
-    throw new Error('Error modifying note');
+    throw new ApiError('Erro ao modificar a nota');
   }
 };
 
@@ -67,8 +84,12 @@ export const deleteNote = async (id: string) => {
     await api.delete(`/notes/${id}`);
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
+      const errorMessage = error.response?.data.error;
+
+      if (errorMessage === 'Unauthorized') {
+        throw new ApiError('Você não está autenticado');
+      }
     }
-    throw new Error('Error modifying note');
+    throw new ApiError('Erro ao deletar a nota');
   }
 };
