@@ -1,10 +1,14 @@
-'use client';
-
 import { deleteAuthToken, getAuthToken } from '@/actions/auth';
 import axios, { AxiosError } from 'axios';
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const isServer = typeof window === 'undefined';
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 api.interceptors.request.use(async (config) => {
@@ -25,8 +29,7 @@ api.interceptors.response.use(
     if (error instanceof AxiosError) {
       const message = error.response?.data.error;
 
-      if (message === 'Unauthorized') {
-        api.defaults.headers.Authorization = '';
+      if (message === 'Unauthorized' && !isServer) {
         await deleteAuthToken();
       }
     }

@@ -1,52 +1,25 @@
 'use client';
 
-import { getAllNotes } from '@/actions/notes';
 import { NoteCard } from '@/app/(home)/note-card';
 import { Spinner } from '@/components/spinner';
 import type { INote } from '@/dtos/note';
-import { ApiError } from '@/lib/api-error';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { toast } from 'sonner';
 import { EmptyNotes } from './empty-notes';
 
 interface ListNotesProps {
+  filteredNotes: INote[];
   search: string;
 }
 
-export const ListNotes = ({ search }: ListNotesProps) => {
+export const ListNotes = ({ filteredNotes, search }: ListNotesProps) => {
   const [loading, setLoading] = useState(true);
-  const [notes, setNotes] = useState<INote[]>([]);
-
-  const handleFetchNotes = useCallback(async () => {
-    try {
-      const response = await getAllNotes();
-
-      const filteredNotes = search
-        ? response.notes.filter(
-            (note) =>
-              note.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
-              note.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-          )
-        : response.notes;
-
-      setNotes(filteredNotes);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        toast.error(error.message);
-      }
-    }
-  }, [search]);
 
   useEffect(() => {
-    handleFetchNotes();
-  }, [handleFetchNotes]);
-
-  useEffect(() => {
-    if (notes[notes.length - 1] || notes.length === 0) {
+    if (filteredNotes[filteredNotes.length - 1] || filteredNotes.length === 0) {
       setLoading(false);
     }
-  }, [notes]);
+  }, [filteredNotes]);
 
   return (
     <>
@@ -56,7 +29,7 @@ export const ListNotes = ({ search }: ListNotesProps) => {
         </div>
       )}
 
-      {notes.length <= 0 && !loading && (
+      {filteredNotes.length <= 0 && !loading && (
         <EmptyNotes searchResult={search !== '' ? true : false} />
       )}
 
@@ -65,7 +38,7 @@ export const ListNotes = ({ search }: ListNotesProps) => {
         className={`transition-opacity duration-500 ${loading ? 'pointer-events-none absolute opacity-0' : ''}`}
       >
         <Masonry gutter="10px" className={loading ? 'overflow-hidden' : ''}>
-          {notes.map((note) => (
+          {filteredNotes.map((note) => (
             <NoteCard key={note.id} note={note} search={search} />
           ))}
         </Masonry>

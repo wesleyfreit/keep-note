@@ -10,7 +10,9 @@ import { usersRoutes } from './routes/users.routes';
 export const app = fastify();
 
 app.register(cors, {
-  origin: env.ORIGIN_URL,
+  origin: [env.ORIGIN_URL],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+  methods: ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 });
 
 app.register(jwt, {
